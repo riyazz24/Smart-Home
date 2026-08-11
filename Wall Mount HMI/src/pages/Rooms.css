@@ -1,0 +1,407 @@
+/* ==========================================
+   PAGE
+========================================== */
+
+.room-page{
+    min-height:100vh;
+    background:#fafafa;
+    position:relative;
+    overflow-x:hidden;
+    padding-bottom:90px;
+}
+
+/* ==========================================
+   CORNER DESIGN
+========================================== */
+
+.corner-left{
+    position:absolute;
+    top:0;
+    left:0;
+    width:250px;
+}
+
+.triangle-design{
+    position:absolute;
+    top:0;
+    right:0;
+    width:230px;
+    z-index:2;
+}
+
+/* ==========================================
+   BACK BUTTON
+========================================== */
+
+.back-btn{
+    position:absolute;
+    top:125px;
+    left:90px;
+    border:none;
+    background:transparent;
+    cursor:pointer;
+    z-index:20;
+    transition:.25s;
+}
+
+.back-btn img{
+    width:42px;
+}
+
+.back-btn:hover{
+    transform:scale(1.08);
+}
+
+/* ==========================================
+   MAIN CARD
+========================================== */
+
+.room-card{
+
+    width:82%;
+    height:560px;
+
+    margin:120px auto 0;
+
+    background:#fff;
+
+    border-radius:10px;
+
+    box-shadow:0 18px 45px rgba(0,0,0,.12);
+
+    position:relative;
+
+    overflow:hidden;
+}
+
+/* ==========================================
+   ROOM SVG
+========================================== */
+
+.room-svg{
+
+    width:100%;
+    height:100%;
+
+    object-fit:contain;
+
+    pointer-events:none;
+}
+
+/* ==========================================
+   ADD BUTTON
+========================================== */
+
+.add-room-btn{
+
+    position:absolute;
+
+    top:18px;
+    right:22px;
+
+    padding:7px 16px;
+
+    border:1px solid #d8d8d8;
+    border-radius:6px;
+
+    background:white;
+
+    cursor:pointer;
+
+    font-size:13px;
+    font-weight:500;
+
+    transition:.25s;
+
+    z-index:20;
+}
+
+.add-room-btn:hover{
+
+    background:#03BAFC;
+    color:white;
+
+    border-color:#03BAFC;
+}
+
+/* ==========================================
+   POPUP
+========================================== */
+
+.popup-overlay{
+
+    position:fixed;
+    inset:0;
+
+    background:rgba(0,0,0,.30);
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    z-index:999;
+
+    animation:fadeIn .25s;
+}
+
+.popup{
+
+    width:380px;
+
+    background:white;
+
+    border-radius:10px;
+
+    padding:28px;
+
+    position:relative;
+
+    box-shadow:0 20px 45px rgba(0,0,0,.18);
+
+    animation:popup .25s;
+}
+
+.popup h3{
+
+    text-align:center;
+
+    margin-bottom:24px;
+
+    font-size:18px;
+}
+
+.popup input{
+
+    width:100%;
+
+    height:42px;
+
+    border:1px solid #ddd;
+
+    border-radius:6px;
+
+    padding-left:12px;
+
+    font-size:15px;
+
+    outline:none;
+
+    margin-bottom:28px;
+}
+
+.popup input:focus{
+
+    border-color:#03BAFC;
+}
+
+.popup-close{
+
+    position:absolute;
+
+    right:12px;
+    top:10px;
+
+    background:none;
+    border:none;
+
+    font-size:22px;
+
+    cursor:pointer;
+
+    color:#666;
+}
+
+.popup-buttons{
+
+    display:flex;
+
+    justify-content:space-between;
+}
+
+.popup-buttons button{
+
+    width:130px;
+    height:42px;
+
+    border:none;
+
+    border-radius:6px;
+
+    cursor:pointer;
+
+    font-weight:600;
+
+    transition:.25s;
+}
+
+.popup-add{
+
+    background:black;
+    color:white;
+}
+
+.popup-add:hover{
+
+    background:#03BAFC;
+}
+
+.popup-cancel{
+
+    background:#ececec;
+}
+
+.popup-cancel:hover{
+
+    background:#d8d8d8;
+}
+
+/* ==========================================
+   ANIMATION
+========================================== */
+
+@keyframes popup{
+
+    from{
+
+        transform:scale(.85);
+        opacity:0;
+    }
+
+    to{
+
+        transform:scale(1);
+        opacity:1;
+    }
+}
+
+@keyframes fadeIn{
+
+    from{
+
+        opacity:0;
+    }
+
+    to{
+
+        opacity:1;
+    }
+}
+
+/* ==========================================
+   LIGHT BULB
+========================================== */
+
+.dashboard-lightbulb{
+
+    position:fixed;
+
+    right:55px;
+    bottom:35px;
+
+    width:85px;
+
+    z-index:20;
+}
+
+.dashboard-pink-circle{
+
+    position:fixed;
+
+    right:55px;
+    bottom:-45px;
+
+    width:130px;
+    height:130px;
+
+    border-radius:50%;
+
+    background:#f06767;
+}
+
+.dashboard-red-circle{
+
+    position:fixed;
+
+    right:-45px;
+    bottom:-55px;
+
+    width:150px;
+    height:150px;
+
+    border-radius:50%;
+
+    background:#c70019;
+}
+
+/* ==========================================
+   NAVBAR
+========================================== */
+
+.dashboard-navbar-wrapper{
+
+    position:fixed;
+
+    left:0;
+    bottom:0;
+
+    width:100%;
+    height:72px;
+
+    z-index:100;
+}
+
+.dashboard-navbar-bg{
+
+    width:100%;
+    height:72px;
+
+    object-fit:cover;
+}
+
+.dashboard-nav-btn{
+
+    position:absolute;
+
+    bottom:8px;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+
+    background:none;
+
+    border:none;
+
+    cursor:pointer;
+}
+
+.dashboard-nav-btn img{
+
+    width:28px;
+}
+
+.dashboard-nav-btn span{
+
+    margin-top:4px;
+
+    font-size:12px;
+
+    color:#666;
+}
+
+.dashboard-home-btn{
+
+    left:80px;
+}
+
+.dashboard-scheduler-btn{
+
+    left:50%;
+
+    transform:translateX(-50%);
+}
+
+.dashboard-profile-btn{
+
+    right:80px;
+}

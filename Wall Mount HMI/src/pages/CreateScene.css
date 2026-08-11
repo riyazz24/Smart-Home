@@ -1,0 +1,267 @@
+.create-scene-container {
+  position: relative;
+  padding: 40px;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+
+/* ---------------- Corner Designs ---------------- */
+
+
+.corner-design {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+
+
+/* ---------------- Horizontal Line ---------------- */
+
+.horizontal-line {
+width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  
+  /* Reset default <hr> styles */
+  height: 0;
+  border: none;
+  
+  /* Use a ultra-thin 0.5px border or lightened color */
+  border-bottom: 0.5px solid #1a1a1a; 
+  
+  margin-top: 155px;
+  margin-bottom: 0px;
+}
+
+/* ---------------- Create Scene Button ---------------- */
+
+.top-button {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 25px;
+  margin-bottom: 30px;
+}
+
+.create-btn {
+  background-color: #06a9e7;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 28px;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.create-btn:hover {
+  opacity: 0.9;
+}
+
+
+/* ---------------- Dropdown Headers ---------------- */
+
+.dropdown-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #dcdcdc;
+  padding: 22px 28px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+
+.dropdown-header h2 {
+  margin: 0;
+  font-weight: 500;
+}
+
+
+/* ---------------- Dropdown Content ---------------- */
+
+.dropdown-content {
+  margin-bottom: 30px;
+}
+
+
+/* ---------------- Condition Cards ---------------- */
+
+.condition-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #e3e3e3;
+  padding: 20px 25px;
+  border-radius: 10px;
+  margin-bottom: 18px;
+}
+
+.condition-card img {
+  width: 45px;
+  height: 45px;
+}
+
+.left-section {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.left-section h3 {
+  margin: 0;
+  font-size: 26px;
+}
+
+.left-section p {
+  margin-top: 5px;
+  color: #555;
+  font-size: 18px;
+}
+
+
+/* ---------------- Edit Icon ---------------- */
+
+.icon-button {
+  cursor: pointer;
+  font-size: 24px;
+}
+
+
+/* ---------------- Edit Box ---------------- */
+
+.edit-box {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.edit-box input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  border: 1px solid lightgray;
+  font-size: 16px;
+}
+
+
+/* ---------------- Task Cards ---------------- */
+
+.task-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #e3e3e3;
+  padding: 20px 25px;
+  border-radius: 10px;
+  margin-bottom: 18px;
+}
+
+
+/* ---------------- Device Icons ---------------- */
+
+.device-icon {
+  font-size: 34px;
+  margin-right: 15px;
+}
+
+
+/* ---------------- Task Actions ---------------- */
+
+.task-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+
+/* ---------------- Delete Icon ---------------- */
+
+.delete-icon {
+  color: darkred;
+  cursor: pointer;
+  font-size: 22px;
+}
+
+
+/* ---------------- Toggle Switch ---------------- */
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 52px;
+  height: 28px;
+}
+
+.switch input {
+  display: none;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  background-color: #ccc;
+  border-radius: 30px;
+  inset: 0;
+  transition: 0.3s;
+}
+
+.slider::before {
+  content: "";
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+
+.switch input:checked + .slider {
+  background-color: #06a9e7;
+}
+
+.switch input:checked + .slider::before {
+  transform: translateX(24px);
+}
+
+
+/* ---------------- Responsive ---------------- */
+
+@media (max-width: 768px) {
+  .create-scene-container {
+    padding: 20px;
+  }
+
+  .corner-left,
+  .corner-right {
+    width: 120px;
+  }
+
+  .left-section h3 {
+    font-size: 20px;
+  }
+
+  .left-section p {
+    font-size: 14px;
+  }
+
+  .create-btn {
+    font-size: 16px;
+    padding: 10px 20px;
+  }
+}
+.triangle-design {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 300px;   /* Adjust if required */
+  z-index: 1;
+}

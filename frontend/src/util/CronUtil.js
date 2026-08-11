@@ -34,3 +34,11 @@ export const parseCronExpression = (cronExpression) => {
     const days = (dayField || '').split(',').map(d => CRON_TO_FULL[d]).filter(Boolean);
     return { time: `${hh}:${mm}`, days };
 };
+
+// "2025-06-25" -> "25/06/2025"
+export const formatDateForDisplay = (isoDate) => {
+    if (!isoDate) return '';
+    const [year, month, day] = isoDate.split('-');
+    if (!year || !month || !day) return isoDate;
+    return `${day}/${month}/${year}`;
+};

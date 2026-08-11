@@ -1,0 +1,176 @@
+/* Full page */
+
+.scheduler-container {
+  min-height: 100vh;
+  background-color: #f4f4f4;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  position: relative;
+  overflow: hidden;
+}
+
+
+/* --------------------- */
+/* Top Left SVG */
+/* --------------------- */
+
+.corner-design {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+
+/* --------------------- */
+/* Title */
+/* --------------------- */
+
+.scheduler-title {
+  margin-top: 180px;
+  align-self: flex-start;
+  margin-left: 120px;
+font-family: Arial, Helvetica, sans-serif;
+  font-size: 25px;
+  font-weight: 500;
+  color: #111;
+}
+
+
+/* --------------------- */
+/* Image Section */
+/* --------------------- */
+
+.image-container {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.sofa-image {
+  width: 280px;
+  object-fit: contain;
+}
+
+
+/* Temporary placeholder */
+
+.image-container h2 {
+  font-size: 30px;
+  font-weight: 600;
+}
+
+
+/* --------------------- */
+/* Description */
+/* --------------------- */
+
+.description {
+  width: 420px;
+
+  display: flex;
+  gap: 12px;
+font-family: Arial, Helvetica, sans-serif;
+  margin-top: 35px;
+  align-items: flex-start;
+}
+
+
+/* Settings Icon */
+
+.settings-icon{
+    width:32px;
+    height:32px;
+    cursor:pointer;
+}
+
+
+/* Description Text */
+
+.description-text h3 {
+  font-size: 16px;
+  font-weight: 500;
+font-family: Arial, Helvetica, sans-serif;
+  margin-bottom: 5px;
+}
+
+
+.description-text p {
+  font-size: 14px;
+  line-height: 1.5;
+  font-family: Arial, Helvetica, sans-serif ;
+  color: #333;
+}
+
+
+/* --------------------- */
+/* Next Button */
+/* --------------------- */
+
+.next-btn {
+  margin-top: 35px;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  background-color: #0099d9;
+  color: white;
+
+  border: none;
+  border-radius: 14px;
+
+  padding: 12px 30px;
+
+  font-size: 18px;
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+
+/* Hover Effect */
+
+.next-btn:hover {
+  background-color: #0087c0;
+}
+
+
+/* --------------------- */
+/* Responsive */
+/* --------------------- */
+
+@media (max-width: 768px) {
+  .scheduler-title {
+    margin-left: 35px;
+    font-size: 20px;
+  }
+
+  .description {
+    width: 90%;
+  }
+
+  .sofa-image {
+    width: 220px;
+  }
+
+  .description-text h3 {
+    font-size: 15px;
+  }
+
+  .description-text p {
+    font-size: 13px;
+  }
+
+  .next-btn {
+    font-size: 16px;
+    padding: 10px 24px;
+  }
+}
+.living-room-img{
+    width: 320px;
+    height: auto;
+    display: block;
+    margin: 20px auto;
+}

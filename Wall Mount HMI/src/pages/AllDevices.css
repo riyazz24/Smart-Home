@@ -1,0 +1,790 @@
+/* ===================================
+   RESET
+=================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Segoe UI",sans-serif;
+}
+
+body{
+
+    background:#F6F7FB;
+
+}
+
+/* ===================================
+   PAGE
+=================================== */
+
+.devices-page{
+
+    width:100%;
+    min-height:100vh;
+    background:white;
+    overflow:hidden;
+    position:relative;
+
+}
+
+/* ===================================
+   CORNERS
+=================================== */
+
+.corner-left{
+
+    position:absolute;
+    top:0;
+    left:0;
+    width:250px;
+    z-index:0;
+    pointer-events:none;
+
+}
+
+.corner-right{
+
+    position:absolute;
+    top:0;
+    right:0;
+    width:250px;
+    transform:rotateY(180deg);
+    z-index:0;
+    pointer-events:none;
+
+}
+
+/* ===================================
+   STATUS BAR
+=================================== */
+
+.status-bar{
+
+    position:absolute;
+    top:18px;
+    left:50%;
+    transform:translateX(-50%);
+    font-weight:600;
+    font-size:15px;
+    color:#111;
+
+}
+
+/* ===================================
+   MAIN
+=================================== */
+
+.main-container{
+
+    display:flex;
+
+    gap:35px;
+
+    align-items:flex-start;
+
+    padding:90px 45px 40px;
+
+    position:relative;
+
+    z-index:2;
+
+}
+
+/* ===================================
+   BACK BUTTON
+=================================== */
+
+.back-btn{
+
+    position:absolute;
+
+    left:10px;
+    top:85px;
+
+    width:42px;
+    height:42px;
+
+    border:none;
+
+    border-radius:50%;
+
+    background:black !important;
+
+    color:white;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    cursor:pointer;
+
+    font-size:18px;
+
+    box-shadow:0 8px 18px rgba(55,198,92,.30);
+
+}
+
+.back-btn:hover{
+
+    transform:scale(1.08);
+
+}
+
+/* ===================================
+   SIDEBAR
+=================================== */
+
+.sidebar1{
+
+    width:180px;
+
+    flex-shrink:0;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:18px;
+
+    margin-top:150px;
+
+}
+
+.sidebar-item{
+
+    height:60px;
+
+    border-radius:12px;
+
+    background:#EFEFEF;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    padding-left:18px;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+    font-size:17px;
+
+}
+
+.sidebar-item:hover{
+
+    background:#E8E8E8;
+
+}
+
+.active-item{
+
+    background:#111;
+
+    color:white;
+
+}
+
+/* ===================================
+   CONTENT
+=================================== */
+
+.content{
+
+    flex:1;
+
+    width:100%;
+
+    padding-right:25px;
+
+}
+
+.content-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:35px;
+
+}
+
+.content-header h1{
+
+    font-size:44px;
+
+    font-weight:400;
+
+    color:#111;
+
+}
+/* ===================================
+   ADD BUTTON
+=================================== */
+
+.add-device-btn{
+
+    min-width:170px;
+    height:48px;
+   
+    border:none;
+    border-radius:12px;
+
+    background:#00A5E3;
+
+    color:white;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    gap:10px;
+
+    cursor:pointer;
+
+    font-size:17px;
+    font-weight:500;
+
+    transition:.25s;
+
+    box-shadow:0 8px 18px rgba(0,165,227,.25);
+
+}
+
+.add-device-btn:hover{
+
+    background:#0093CF;
+
+    transform:translateY(-2px);
+
+}
+
+/* ===================================
+   TABLE
+=================================== */
+
+.device-table{
+
+    width:100%;
+
+    border-collapse:separate;
+
+    border-spacing:0;
+
+    background:#fff;
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+
+}
+
+.device-table thead{
+
+    background:#111;
+
+    color:#fff;
+
+}
+
+.device-table th{
+
+    padding:18px 22px;
+
+    text-align:left;
+
+    font-size:17px;
+
+    font-weight:500;
+
+}
+
+.device-table td{
+
+    padding:20px 22px;
+
+    border-bottom:1px solid #ECECEC;
+
+    font-size:16px;
+
+    vertical-align:middle;
+
+}
+
+.device-table tbody tr:last-child td{
+
+    border-bottom:none;
+
+}
+
+.device-table tbody tr{
+
+    transition:.25s;
+
+}
+
+.device-table tbody tr:hover{
+
+    background:#FAFAFA;
+
+}
+
+/* ===================================
+   DEVICE INFO
+=================================== */
+
+.device-info{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+}
+
+.device-icon{
+
+    width:54px;
+
+    height:54px;
+
+    border-radius:50%;
+
+    background:#F3F3F3;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:22px;
+
+    color:#555;
+
+}
+
+.device-info span{
+
+    font-size:17px;
+
+    font-weight:500;
+
+    color:#222;
+
+}
+
+/* ===================================
+   ACTION BUTTONS
+=================================== */
+
+.action-buttons{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+}
+
+.edit-btn,
+.delete-btn{
+
+    width:38px;
+
+    height:38px;
+
+    border:none;
+
+    border-radius:10px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+    font-size:16px;
+
+}
+
+.edit-btn{
+
+    background:#EAF4FF;
+
+    color:#0077FF;
+
+}
+
+.edit-btn:hover{
+
+    background:#D5EAFF;
+
+}
+
+.delete-btn{
+
+    background:#FFECEC;
+
+    color:#E53935;
+
+}
+
+.delete-btn:hover{
+
+    background:#FFDADA;
+
+}
+
+/* ===================================
+   TOGGLE ALIGNMENT
+=================================== */
+
+.device-table td:nth-child(3){
+
+    width:120px;
+
+}
+
+.device-table td:nth-child(4){
+
+    width:120px;
+
+}
+/* ===================================
+   POPUPS
+=================================== */
+
+.popup-overlay{
+
+    position:fixed;
+    inset:0;
+
+    background:rgba(0,0,0,.35);
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    z-index:999;
+
+    animation:fadeIn .25s;
+
+}
+
+.popup{
+
+    width:430px;
+
+    background:#fff;
+
+    border-radius:18px;
+
+    padding:30px;
+
+    box-shadow:0 20px 50px rgba(0,0,0,.18);
+
+    animation:popupScale .25s;
+
+}
+
+.popup h2{
+
+    text-align:center;
+
+    font-size:28px;
+
+    font-weight:500;
+
+    margin-bottom:25px;
+
+}
+
+.popup p{
+
+    text-align:center;
+
+    color:#666;
+
+    margin-bottom:22px;
+
+    line-height:1.6;
+
+}
+
+.popup input{
+
+    width:100%;
+
+    height:50px;
+
+    margin-bottom:18px;
+
+    padding:12px 15px;
+
+    border:1px solid #DADADA;
+
+    border-radius:10px;
+
+    outline:none;
+
+    font-size:16px;
+
+}
+
+.popup input:focus{
+
+    border-color:#00A5E3;
+
+}
+
+.popup-buttons{
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:12px;
+
+    margin-top:10px;
+
+}
+
+.cancel-btn{
+
+    width:110px;
+
+    height:46px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#ECECEC;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.cancel-btn:hover{
+
+    background:#DDDDDD;
+
+}
+
+.save-btn{
+
+    width:140px;
+
+    height:46px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#00A5E3;
+
+    color:white;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.save-btn:hover{
+
+    background:#0092CF;
+
+}
+
+.delete-confirm-btn{
+
+    width:140px;
+
+    height:46px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#E53935;
+
+    color:white;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.delete-confirm-btn:hover{
+
+    background:#C62828;
+
+}
+
+/* ===================================
+   SUCCESS
+=================================== */
+
+.success-popup{
+
+    text-align:center;
+
+}
+
+.success-circle{
+
+    width:90px;
+    height:90px;
+
+    margin:auto;
+
+    margin-bottom:20px;
+
+    border-radius:50%;
+
+    background:#35C759;
+
+    color:white;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    font-size:42px;
+
+    font-weight:bold;
+
+}
+
+/* ===================================
+   ANIMATION
+=================================== */
+
+@keyframes popupScale{
+
+    from{
+
+        transform:scale(.85);
+
+        opacity:0;
+
+    }
+
+    to{
+
+        transform:scale(1);
+
+        opacity:1;
+
+    }
+
+}
+
+@keyframes fadeIn{
+
+    from{
+
+        opacity:0;
+
+    }
+
+    to{
+
+        opacity:1;
+
+    }
+
+}
+
+/* ===================================
+   RESPONSIVE
+=================================== */
+
+@media(max-width:900px){
+
+.main-container{
+
+    flex-direction:column;
+
+    padding:90px 20px 30px;
+
+}
+
+.sidebar{
+
+    width:100%;
+
+}
+
+.content{
+
+    padding-right:0;
+
+}
+
+.content-header{
+
+    flex-direction:column;
+
+    align-items:flex-start;
+
+    gap:18px;
+
+}
+
+.add-device-btn{
+
+    width:100%;
+
+}
+
+.device-table{
+
+    display:block;
+
+    overflow-x:auto;
+
+}
+
+.popup{
+
+    width:92%;
+
+}
+
+.action-buttons{
+
+    justify-content:center;
+
+}
+
+}
+.triangle-design {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 260px;
+  height: auto;
+  z-index: 2;
+  pointer-events: none;
+}

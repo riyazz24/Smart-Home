@@ -12,7 +12,7 @@ export default function InsideLayout({ activePage, insideActivePage, menu, child
                 </div>
 
                 {/* Inside Content */}
-                <div style={{ width: 'calc(100% - 240px)', height: '100%', overflowY: 'hidden' }}>
+                <div style={{ width: 'calc(100% - 240px)', height: '100%', overflowY: 'auto' }}>
                     {children}
                 </div>
 

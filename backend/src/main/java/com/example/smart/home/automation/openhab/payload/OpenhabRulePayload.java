@@ -1,9 +1,16 @@
 package com.example.smart.home.automation.openhab.payload;
 
-import com.example.smart.home.automation.openhab.enums.OpenhabEvent;
-import lombok.*;
-
 import java.util.List;
+
+import com.example.smart.home.automation.openhab.enums.OpenhabEvent;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -28,12 +35,14 @@ public class OpenhabRulePayload {
 
     private String errorMessage;
 
+//    @JsonIgnoreProperties(ignoreUnknown = true)
     @Data
     public static class TriggerPayload {
         private String type;
         private String cronExpression;
         private String itemName;
         private String state;
+        private List<String> dates;
     }
 
     @Data

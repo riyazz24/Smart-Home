@@ -1,0 +1,217 @@
+/* =======================================
+   PAGE
+======================================= */
+
+.agent-page{
+    width:100%;
+    min-height:100vh;
+    background:#fafafa;
+    position:relative;
+    overflow:hidden;
+}
+
+/* =======================================
+   TOP DESIGNS
+======================================= */
+
+.corner-left{
+    position:absolute;
+    top:0;
+    left:0;
+    width:250px;      
+}
+
+.triangle-design{
+    position:absolute;
+    top:0;
+    right:0;
+    width:250px;
+    z-index:2;
+}
+
+/* =======================================
+   BACK BUTTON
+======================================= */
+
+.back-btn{
+    position:absolute;
+    top:125px;
+    left:90px;
+
+    border:none;
+    background:transparent;
+    cursor:pointer;
+    z-index:20;
+}
+
+.back-btn img{
+    width:42px;
+}
+
+/* =======================================
+   AGENT CARD
+======================================= */
+
+.agent-card{
+    display:block;
+     min-height: 430px;   
+     width: 80%;
+    height: auto;
+    object-fit: contain;
+    margin:120px auto 0;
+
+    filter:drop-shadow(0 10px 25px rgba(0,0,0,.12));
+ transition: box-shadow 0.25s ease, transform 0.25s ease;
+    z-index:5;
+    position:relative;
+}
+
+/* =======================================
+   BULB
+======================================= */
+
+.lightbulb{
+    position:fixed;
+
+    right:55px;
+    bottom:0px;
+
+    width:82px;
+
+    z-index:50;
+}
+
+/* =======================================
+   CIRCLES
+======================================= */
+
+.pink-circle{
+    position:fixed;
+
+    width:125px;
+    height:125px;
+
+    right:58px;
+    bottom:-40px;
+
+    border-radius:50%;
+    background:#F06767;
+
+    z-index:20;
+}
+
+.red-circle{
+    position:fixed;
+
+    width:145px;
+    height:145px;
+
+    right:-42px;
+    bottom:-52px;
+
+    border-radius:50%;
+    background:#C70019;
+
+    z-index:21;
+}
+
+/* =======================================
+   BOTTOM NAVBAR
+======================================= */
+
+.bottom-navbar{
+    position:fixed;
+
+    left:0;
+    bottom:0;
+
+    width:100%;
+    height:78px;
+
+    z-index:100;
+}
+
+.bottom-navbar-bg{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+/* =======================================
+   NAV BUTTONS
+======================================= */
+
+.nav-item{
+    position:absolute;
+    bottom:6px;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+
+    border:none;
+    background:transparent;
+    cursor:pointer;
+}
+
+.nav-item img{
+    width:28px;
+    height:28px;
+}
+
+.nav-item span{
+    margin-top:4px;
+    font-size:12px;
+    color:#666;
+}
+
+/* Home */
+
+.nav-home{
+    left:90px;
+}
+
+/* Scheduler */
+
+.nav-scheduler{
+    left:50%;
+    transform:translateX(-50%);
+}
+
+/* Profile */
+
+.nav-profile{
+    right:90px;
+}
+
+/* Active Page */
+
+.active-nav span{
+    color:#03BAFC;
+    font-weight:700;
+}
+
+/* =======================================
+   RESPONSIVE
+======================================= */
+
+@media(max-width:900px){
+
+.agent-card{
+    width:92%;
+    margin-top:130px;
+}
+
+.nav-home{
+    left:45px;
+}
+
+.nav-profile{
+    right:45px;
+}
+
+.lightbulb{
+    width:72px;
+}
+
+}

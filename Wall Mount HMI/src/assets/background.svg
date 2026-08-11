@@ -1,0 +1,82 @@
+<svg width="1600" height="340" viewBox="0 0 1600 340" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+<defs>
+<clipPath id="clip">
+<rect width="1600" height="340" rx="0" ry="0"/>
+</clipPath>
+</defs>
+
+<g clip-path="url(#clip)">
+
+<!-- White Background -->
+<rect width="1600" height="340" fill="#FCFAFA"/>
+
+<!-- Pink Wave -->
+<path
+d="
+M0 78
+C220 110 420 118 640 92
+C850 65 1110 18 1600 42
+V340
+H0
+Z"
+fill="#F7E4E4"/>
+
+<!-- Rounded Bottom -->
+<path
+d="
+M0 78
+C220 110 420 118 640 92
+C850 65 1110 18 1600 42
+V320
+Q1600 340 1580 340
+H20
+Q0 340 0 320
+Z"
+fill="#F7E4E4"/>
+
+<!-- Sparkle -->
+<path
+d="M960 116
+L968 138
+L990 146
+L968 154
+L960 176
+L952 154
+L930 146
+L952 138
+Z"
+fill="#F45A5A"/>
+
+<!-- Sparkle -->
+<path
+d="M1012 154
+L1017 166
+L1029 171
+L1017 176
+L1012 188
+L1007 176
+L995 171
+L1007 166
+Z"
+fill="#F45A5A"/>
+
+<!-- Decorative Dots -->
+<circle cx="1068" cy="132" r="4" fill="#F39A9A"/>
+<circle cx="924" cy="196" r="4" fill="#F39A9A"/>
+
+<!-- Caption -->
+<text
+x="800"
+y="250"
+font-family="Segoe UI"
+font-size="18"
+font-weight="500"
+fill="#B66A6A"
+text-anchor="middle">
+Click add to create new scene
+</text>
+
+</g>
+
+</svg>

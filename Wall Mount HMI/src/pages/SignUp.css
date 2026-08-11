@@ -1,0 +1,199 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+.signup-page{
+ 
+   
+    width:100%;
+    min-height:100vh;
+    background:white;
+    overflow:hidden;
+    position:relative;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+/* Ribbon */
+
+.header-ribbon {
+    z-index:10;
+    position: absolute;
+    top: 185px;
+    left: 0;
+    margin-left: 20px;
+    width: 230px;
+    height: 42px;
+
+    background: #7678ED;
+    color: #fff;
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    padding-left: 18px;
+
+    font-size: 26px;
+    z-index: 10;
+}
+
+.header-ribbon::after {
+    content: "";
+
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    width: 0;
+    height: 0;
+
+    border-top: 21px solid transparent;
+    border-bottom: 21px solid transparent;
+    border-right: 24px solid white;
+}
+
+/* Blue section */
+
+.signup-section {
+    z-index:2;
+    margin-top: 110px;
+
+    width: 100%;
+    min-height: calc(100vh - 210px);
+
+    background: #DCECEF;
+
+    border-top-left-radius: 45% 120px;
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+
+    padding-top: 70px;
+
+    position: relative;
+}
+
+/* Form */
+
+.signup-card{
+    width:330px;
+}
+
+.input-group{
+    display:flex;
+    flex-direction:column;
+    margin-bottom:20px;
+}
+
+.input-group label{
+    font-size:18px;
+    margin-bottom:8px;
+}
+
+.input-group input{
+
+    height:42px;
+
+    border:1px solid #cfcfcf;
+
+    border-radius:8px;
+
+    padding:10px;
+
+    outline:none;
+
+    font-size:16px;
+}
+
+.input-group input:focus{
+
+    border-color:#7678ED;
+}
+
+/* Button */
+
+.primary-btn{
+
+    width:180px;
+
+    height:50px;
+
+    background:#7678ED;
+
+    border:none;
+
+    border-radius:8px;
+
+    color:white;
+
+    font-size:22px;
+
+    cursor:pointer;
+
+    display:block;
+
+    margin:40px auto 15px;
+    
+}
+
+.primary-btn:hover{
+
+    background:#6366e3;
+}
+
+.login-text{
+
+    text-align:center;
+
+    color:#666;
+
+    font-size:15px;
+
+    cursor:pointer;
+}
+
+/* Responsive */
+
+@media(max-width:768px){
+
+.header-ribbon{
+
+    width:170px;
+
+    font-size:22px;
+}
+
+.signup-card{
+
+    width:90%;
+}
+
+.signup-section{
+
+    border-top-left-radius:35% 80px;
+}
+
+}
+
+
+
+.corner-left{
+    position: absolute;
+
+    top: 0px;
+    left: 0px;
+
+    width: 60px;
+    height: auto;
+    transform: scaleX(6);
+
+    pointer-events: none;
+    user-select: none;
+
+    z-index: 0;
+}
+
+

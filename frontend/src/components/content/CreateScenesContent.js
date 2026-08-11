@@ -1,19 +1,19 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FiCalendar, FiX } from 'react-icons/fi';
 import axiosInstance from '../../util/AxiosInstance';
 import ModalLayout from '../layout/ModalLayout';
 import { listThings } from '../../util/ThingApi';
-import { DAYS, buildCronExpression } from '../../util/CronUtil';
+import { DAYS, buildCronExpression, formatDateForDisplay } from '../../util/CronUtil';
 
 
 export default function CreateScenesContent() {
     const [deviceList, setDeviceList] = useState([]);
-    const [roomList, setRoomList] = useState([]);
     const [ruleName, setRuleName] = useState('');
-    const [fromTime, setFromTime] = useState('');
-    const [toTime, setToTime] = useState('');
-    const [selectedDays, setSelectedDays] = useState(['MONDAY']);
-    const [room, setRoom] = useState('');
+    const [time, setTime] = useState('');
+    const [dateInput, setDateInput] = useState('');
+    const [selectedDates, setSelectedDates] = useState([]); // ["2025-06-25", "2025-06-27", ...]
+    const [selectedDays, setSelectedDays] = useState([]);
     const [device, setDevice] = useState('');
     const [command, setCommand] = useState('ON');
     const [modal, setModal] = useState({ show: false, title: '', message: '', isError: false, onConfirm: null });
@@ -28,17 +28,7 @@ export default function CreateScenesContent() {
             navigate('/');
             return;
         }
-        const fetchRoomsAndDevices = async () => {
-            try {
-                const response = await axiosInstance.get('/room/list');
-                if (response.status === 200) {
-                    setRoomList(response.data.roomList || []);
-                }
-            } catch (err) {
-                const errorMessage = err.response?.data?.message || 'Failed to fetch room';
-                console.error(errorMessage);
-            }
-            
+        const fetchDevices = async () => {
             try {
                 const { data, status } = await listThings();
                 if (status === 200) {
@@ -55,8 +45,32 @@ export default function CreateScenesContent() {
                 console.error(err.response?.data?.message || 'Failed to fetch devices');
             }
         };
-        fetchRoomsAndDevices();
+        fetchDevices();
     }, [navigate]);
+
+    // Picking a date adds it to the selected-dates list (instead of replacing
+    // a single value) and auto-checks the matching day-of-week button below,
+    // e.g. picking a Wednesday auto-checks "Wed". The day buttons stay
+    // editable afterwards in case the scene should also repeat on other days.
+    // The date input itself is cleared right after so the same control can be
+    // used to add the next date.
+    const handleDateChange = (value) => {
+        if (!value) return;
+
+        setSelectedDates((prev) => (prev.includes(value) ? prev : [...prev, value].sort()));
+
+        const weekdayIndex = new Date(`${value}T00:00:00`).getDay(); // 0=Sun ... 6=Sat, matches DAYS order
+        const matchingDay = days[weekdayIndex]?.full;
+        if (matchingDay) {
+            setSelectedDays((prev) => (prev.includes(matchingDay) ? prev : [...prev, matchingDay]));
+        }
+
+        setDateInput('');
+    };
+
+    const removeDate = (value) => {
+        setSelectedDates((prev) => prev.filter((d) => d !== value));
+    };
 
     const toggleDay = (dayFull) => {
         setSelectedDays(prev =>
@@ -69,7 +83,7 @@ export default function CreateScenesContent() {
             navigate('/');
             return;
         }
-        if (!ruleName || !fromTime || !toTime || selectedDays.length === 0 || !room || !device || !command) {
+        if (!ruleName || !time || selectedDates.length === 0 || selectedDays.length === 0 || !device || !command) {
             setModal({
                 show: true,
                 title: 'Error',
@@ -80,45 +94,26 @@ export default function CreateScenesContent() {
             return;
         }
 
-        const oppositeCommand = command === 'ON' ? 'OFF' : 'ON';
-
-        const startRulePayload = {
-            ruleName: `${ruleName} (Start)`,
+        const rulePayload = {
+            ruleName,
             triggerPayload: {
                 type: 'TIME',
-                cronExpression: buildCronExpression(fromTime, selectedDays),
+                cronExpression: buildCronExpression(time, selectedDays),
                 itemName: null,
                 state: null,
+                dates: selectedDates,
             },
             actionPayloadList: [
                 { itemName: device, command },
             ],
         };
 
-        const endRulePayload = {
-            ruleName: `${ruleName} (End)`,
-            triggerPayload: {
-                type: 'TIME',
-                cronExpression: buildCronExpression(toTime, selectedDays),
-                itemName: null,
-                state: null,
-            },
-            actionPayloadList: [
-                { itemName: device, command: oppositeCommand },
-            ],
-        };
-
         try {
-            const { data, status } = await axiosInstance.post('/rule/create', startRulePayload);
-            let secondMessage = '';
-            if (status === 200) {
-                const endResponse = await axiosInstance.post('/rule/create', endRulePayload);
-                secondMessage = endResponse.data?.message || '';
-            }
+            const { data } = await axiosInstance.post('/rule/create', rulePayload);
             setModal({
                 show: true,
                 title: 'Success',
-                message: data.message + (secondMessage ? ` / ${secondMessage}` : ''),
+                message: data.message,
                 isError: false,
                 onConfirm: () => {
                     setModal({ ...modal, show: false });
@@ -160,13 +155,34 @@ export default function CreateScenesContent() {
 
                     <div className="mb-4">
                         <div className="form-label fw-bold">Time</div>
-                        <div className="d-flex align-items-center gap-3">
-                            <input type="time" id='fromTime' className="form-control py-2" style={selectStyle}
-                                placeholder="Start Time" value={fromTime} onChange={e => setFromTime(e.target.value)} required />
-                            <span>To</span>
-                            <input type="time" id='toTime' className="form-control py-2" style={selectStyle}
-                                placeholder="End Time" value={toTime} onChange={e => setToTime(e.target.value)} required />
+                        <input type="time" id='time' className="form-control py-2" style={selectStyle}
+                            placeholder="Start Time" value={time} onChange={e => setTime(e.target.value)} required />
+                    </div>
+
+                    <div className="mb-4">
+                        <div className="form-label fw-bold">Date</div>
+                        <div className="position-relative">
+                            <input type="date" id='date' className="form-control py-2 pe-5" style={selectStyle}
+                                placeholder="Select Date" value={dateInput} onChange={e => handleDateChange(e.target.value)} required={selectedDates.length === 0} />
+                            <FiCalendar
+                                className="position-absolute top-50 translate-middle-y"
+                                style={{ right: '14px', pointerEvents: 'none', fontSize: '15px', color: '#1C1C1E' }}
+                            />
                         </div>
+
+                        {/* Selected dates - e.g. picking 25/06/2025, 27/06/2025, 30/06/2025 shows all three here */}
+                        {selectedDates.length > 0 && (
+                            <div className="d-flex flex-wrap gap-2 mt-2">
+                                {selectedDates.map((d) => (
+                                    <span key={d}
+                                        className="d-inline-flex align-items-center gap-2 rounded-pill px-3 py-1"
+                                        style={{ backgroundColor: '#1C1C1E', color: '#fff', fontSize: '13px' }}>
+                                        {formatDateForDisplay(d)}
+                                        <FiX style={{ cursor: 'pointer' }} onClick={() => removeDate(d)} />
+                                    </span>
+                                ))}
+                            </div>
+                        )}
                     </div>
 
                     <div className="mb-4">
@@ -191,16 +207,6 @@ export default function CreateScenesContent() {
                             <option value="">Select Device</option>
                             {deviceList.map((deviceListObj, index) => (
                                 <option key={deviceListObj.itemName ?? index} value={deviceListObj.itemName}>{deviceListObj.label}</option>
-                            ))}
-                        </select>
-                    </div>
-
-                    <div className="mb-4">
-                        <div className="form-label fw-bold">Rooms</div>
-                        <select className="form-select py-2" style={selectStyle} id='room' value={room} onChange={e => setRoom(e.target.value)} required>
-                            <option value="">Select Room</option>
-                            {roomList.map((roomListObj, index) => (
-                                <option key={roomListObj.roomId ?? index} value={roomListObj.roomId}>{roomListObj.roomName}</option>
                             ))}
                         </select>
                     </div>

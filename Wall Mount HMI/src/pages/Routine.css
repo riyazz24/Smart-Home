@@ -1,0 +1,1000 @@
+/* =====================================================
+   ROUTINE PAGE
+===================================================== */
+
+* {
+  box-sizing: border-box;
+}
+
+.routine-page {
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  background: #ffffff;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #111;
+}
+
+/* =====================================================
+   LEFT DECORATIVE CURVES
+===================================================== */
+
+.corner-left {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 300px;
+  height: 190px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* =====================================================
+   RIGHT TRIANGLE DESIGN
+===================================================== */
+
+.corner-right-ribbon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 230px;
+  height: auto;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* =====================================================
+   BACK BUTTON
+===================================================== */
+
+.routine-back-btn {
+  position: absolute;
+  top: 118px;
+  left: 9%;
+
+  width: 52px;
+  height: 52px;
+
+  border: none;
+  border-radius: 50%;
+
+  background: #34c759;
+  color: white;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 20px;
+  cursor: pointer;
+
+  box-shadow: 0 8px 20px rgba(52, 199, 89, 0.28);
+
+  z-index: 20;
+
+  transition: all 0.25s ease;
+}
+
+.routine-back-btn:hover {
+  transform: scale(1.07);
+  box-shadow: 0 12px 25px rgba(52, 199, 89, 0.38);
+}
+
+/* =====================================================
+   MAIN CONTAINER
+===================================================== */
+
+.routine-container {
+  position: relative;
+  z-index: 5;
+
+  width: min(1050px, 82%);
+
+  margin: 0 auto;
+
+  padding-top: 55px;
+  padding-bottom: 150px;
+}
+
+/* =====================================================
+   MAIN TITLE
+===================================================== */
+
+.routine-container h1 {
+  margin: 0;
+
+  font-size: 48px;
+  font-weight: 500;
+
+  color: #111;
+
+  letter-spacing: -1px;
+}
+
+/* Decorative line under heading */
+
+.routine-line {
+  width: 100%;
+  height: 1px;
+
+  background: #222;
+
+  margin-top: 20px;
+  margin-bottom: 35px;
+}
+
+/* =====================================================
+   DEVICE SELECT
+===================================================== */
+
+.device-select {
+  width: 220px;
+  height: 48px;
+
+  padding: 0 15px;
+
+  border: 1px solid #d5d5d5;
+  border-radius: 10px;
+
+  background: #ffffff;
+
+  font-size: 17px;
+  color: #333;
+
+  outline: none;
+
+  cursor: pointer;
+
+  margin-bottom: 30px;
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+
+  transition: all 0.2s ease;
+}
+
+.device-select:hover {
+  border-color: #00a5e3;
+}
+
+.device-select:focus {
+  border-color: #00a5e3;
+
+  box-shadow:
+    0 0 0 3px rgba(0, 165, 227, 0.12);
+}
+
+/* =====================================================
+   ROUTINE OPTIONS
+===================================================== */
+
+.routine-option {
+  width: 100%;
+  min-height: 78px;
+
+  background: #f1f1f1;
+
+  border: 1px solid #e1e1e1;
+
+  border-radius: 14px;
+
+  padding: 0 25px;
+
+  margin-bottom: 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.routine-option:hover {
+  background: #ffffff;
+
+  border-color: #00a5e3;
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 8px 22px rgba(0, 165, 227, 0.12);
+}
+
+.routine-option > svg {
+  font-size: 20px;
+  color: #555;
+}
+
+/* =====================================================
+   CARD LEFT SIDE
+===================================================== */
+
+.card-left {
+  display: flex;
+  align-items: center;
+
+  gap: 18px;
+}
+
+.card-left span {
+  font-size: 21px;
+  font-weight: 400;
+
+  color: #222;
+}
+
+/* Weather icon */
+
+.card-left .weather {
+  font-size: 25px;
+  color: #d1ad00;
+}
+
+/* Clock icon */
+
+.card-left .clock {
+  font-size: 24px;
+  color: #8a6a6a;
+}
+
+/* =====================================================
+   SELECTED OPTION
+===================================================== */
+
+.selected-option {
+  background: #f0fbff;
+
+  border: 2px solid #00a5e3;
+
+  box-shadow:
+    0 8px 20px rgba(0, 165, 227, 0.10);
+}
+
+.selected-option > svg {
+  color: #00a5e3;
+}
+
+/* =====================================================
+   ADD BUTTON
+===================================================== */
+
+.add-btn {
+  position: fixed;
+
+  right: 38px;
+  bottom: 92px;
+
+  width: 135px;
+  height: 52px;
+
+  border: none;
+  border-radius: 12px;
+
+  background: #00a5e3;
+  color: white;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 9px;
+
+  font-size: 18px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 8px 22px rgba(0, 165, 227, 0.28);
+
+  z-index: 50;
+
+  transition: all 0.25s ease;
+}
+
+.add-btn:hover {
+  background: #008fd1;
+
+  transform: translateY(-3px);
+
+  box-shadow:
+    0 12px 28px rgba(0, 165, 227, 0.35);
+}
+
+.add-btn svg {
+  font-size: 17px;
+}
+
+/* =====================================================
+   SUB PAGE HEADER
+===================================================== */
+
+.sub-page-header {
+  display: flex;
+  align-items: center;
+
+  gap: 18px;
+
+  margin-bottom: 30px;
+}
+
+.sub-page-header h2 {
+  margin: 0;
+
+  font-size: 34px;
+  font-weight: 500;
+
+  color: #111;
+}
+
+/* Small green back button */
+
+.small-back-btn {
+  width: 48px;
+  height: 48px;
+
+  border: none;
+  border-radius: 50%;
+
+  background: #34c759;
+  color: white;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 18px;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 7px 18px rgba(52, 199, 89, 0.25);
+
+  transition: all 0.2s ease;
+}
+
+.small-back-btn:hover {
+  transform: scale(1.06);
+}
+
+/* =====================================================
+   WEATHER PAGE
+===================================================== */
+
+.weather-options {
+  display: grid;
+
+  grid-template-columns: repeat(2, 1fr);
+
+  gap: 18px;
+
+  margin-top: 10px;
+}
+
+.weather-option {
+  position: relative;
+
+  min-height: 100px;
+
+  padding: 18px 22px;
+
+  border: 1px solid #e1e1e1;
+
+  border-radius: 16px;
+
+  background: white;
+
+  display: flex;
+  align-items: center;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 5px 18px rgba(0, 0, 0, 0.05);
+
+  transition: all 0.25s ease;
+}
+
+.weather-option:hover {
+  transform: translateY(-3px);
+
+  border-color: #00a5e3;
+
+  box-shadow:
+    0 10px 25px rgba(0, 165, 227, 0.13);
+}
+
+.weather-option span {
+  font-size: 20px;
+  font-weight: 500;
+
+  color: #222;
+}
+
+/* Weather icon box */
+
+.weather-option-icon {
+  width: 58px;
+  height: 58px;
+
+  border-radius: 17px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-right: 18px;
+
+  font-size: 26px;
+
+  flex-shrink: 0;
+
+  transition: transform 0.25s ease;
+}
+
+.weather-option:hover .weather-option-icon {
+  transform: scale(1.08);
+}
+
+/* Rain */
+
+.weather-rain {
+  color: #2386d8;
+
+  background: linear-gradient(
+    135deg,
+    #e9f6ff,
+    #d8edff
+  );
+}
+
+/* Sunny */
+
+.weather-sunny {
+  color: #e9a900;
+
+  background: linear-gradient(
+    135deg,
+    #fff8d8,
+    #ffefaa
+  );
+}
+
+/* Cloudy */
+
+.weather-cloudy {
+  color: #68717b;
+
+  background: linear-gradient(
+    135deg,
+    #f0f2f4,
+    #e1e5e8
+  );
+}
+
+/* Storm */
+
+.weather-storm {
+  color: #6844b8;
+
+  background: linear-gradient(
+    135deg,
+    #f0eaff,
+    #e2d7ff
+  );
+}
+
+/* Selected weather */
+
+.weather-option-selected {
+  border: 2px solid #00a5e3;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f4fcff,
+      #ffffff
+    );
+
+  box-shadow:
+    0 10px 25px rgba(0, 165, 227, 0.13);
+}
+
+/* Check */
+
+.weather-check {
+  margin-left: auto;
+
+  width: 25px;
+  height: 25px;
+
+  padding: 5px;
+
+  border-radius: 50%;
+
+  background: #00a5e3;
+
+  color: white;
+
+  font-size: 14px;
+}
+
+/* =====================================================
+   TIME PAGE
+===================================================== */
+
+.time-section {
+  margin-bottom: 25px;
+}
+
+.time-section-title {
+  font-size: 18px;
+
+  font-weight: 500;
+
+  color: #333;
+
+  margin-bottom: 9px;
+}
+
+/* Time input */
+
+.time-input-box {
+  width: 100%;
+  height: 74px;
+
+  border: 1px solid #dedede;
+
+  border-radius: 14px;
+
+  background: white;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0 20px;
+
+  box-shadow:
+    0 4px 15px rgba(0, 0, 0, 0.04);
+
+  transition: all 0.2s ease;
+}
+
+.time-input-box:hover {
+  border-color: #00a5e3;
+
+  box-shadow:
+    0 7px 20px rgba(0, 165, 227, 0.10);
+}
+
+/* React Time Picker */
+
+.time-input-box .react-time-picker {
+  width: 100%;
+}
+
+.time-input-box .react-time-picker__wrapper {
+  width: 100%;
+
+  height: 72px;
+
+  border: none !important;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+}
+
+.time-input-box .react-time-picker__inputGroup {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+}
+
+.time-input-box
+.react-time-picker__inputGroup__input {
+  font-size: 29px;
+
+  color: #111;
+
+  border: none;
+
+  outline: none;
+
+  text-align: center;
+}
+
+.time-input-box
+.react-time-picker__button {
+  display: none;
+}
+
+/* =====================================================
+   DATE BOX
+===================================================== */
+
+.date-input-box {
+  width: 100%;
+  height: 68px;
+
+  border: 1px solid #dedede;
+
+  border-radius: 14px;
+
+  background: white;
+
+  padding: 0 22px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  cursor: pointer;
+
+  margin-bottom: 25px;
+
+  box-shadow:
+    0 4px 15px rgba(0, 0, 0, 0.04);
+
+  transition: all 0.2s ease;
+}
+
+.date-input-box:hover {
+  border-color: #7a7aee;
+
+  box-shadow:
+    0 7px 20px rgba(122, 122, 238, 0.10);
+}
+
+.date-input-box span {
+  font-size: 18px;
+
+  color: #333;
+}
+
+.date-input-box svg {
+  font-size: 18px;
+
+  color: #333;
+}
+
+/* =====================================================
+   DONE BUTTON
+===================================================== */
+
+.time-done-btn {
+  width: 125px;
+  height: 46px;
+
+  margin-top: 5px;
+
+  border: none;
+  border-radius: 11px;
+
+  background: #00a5e3;
+
+  color: white;
+
+  font-size: 17px;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 7px 18px rgba(0, 165, 227, 0.22);
+
+  transition: all 0.2s ease;
+}
+
+.time-done-btn:hover {
+  background: #008fd1;
+
+  transform: translateY(-2px);
+}
+
+/* =====================================================
+   CALENDAR
+===================================================== */
+
+.calendar-wrapper {
+  display: flex;
+
+  justify-content: center;
+
+  margin-top: 10px;
+}
+
+.calendar-wrapper .react-datepicker {
+  border: none !important;
+
+  border-radius: 18px !important;
+
+  box-shadow:
+    0 12px 35px rgba(0, 0, 0, 0.12);
+
+  overflow: hidden;
+}
+
+.calendar-wrapper
+.react-datepicker__header {
+  background: #ffffff !important;
+
+  border-bottom: 1px solid #eeeeee !important;
+
+  padding-top: 18px;
+}
+
+.calendar-wrapper
+.react-datepicker__current-month {
+  font-size: 19px !important;
+
+  font-weight: 600 !important;
+}
+
+.calendar-wrapper
+.react-datepicker__day--selected {
+  background: #00a5e3 !important;
+
+  border-radius: 50% !important;
+}
+
+.calendar-wrapper
+.react-datepicker__day:hover {
+  border-radius: 50% !important;
+}
+
+/* =====================================================
+   POPUP
+===================================================== */
+
+.popup-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.38);
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  z-index: 999;
+}
+
+.popup {
+  width: 390px;
+
+  max-width: 90%;
+
+  background: white;
+
+  border-radius: 20px;
+
+  padding: 32px;
+
+  text-align: center;
+
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.22);
+
+  animation: popupShow 0.25s ease;
+}
+
+@keyframes popupShow {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.success-circle {
+  width: 82px;
+  height: 82px;
+
+  margin: 0 auto 20px;
+
+  border-radius: 50%;
+
+  background: #35c759;
+
+  color: white;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  font-size: 40px;
+
+  font-weight: bold;
+}
+
+.popup h2 {
+  margin: 0 0 10px;
+
+  font-size: 25px;
+}
+
+.popup p {
+  margin: 0 0 25px;
+
+  color: #666;
+
+  font-size: 16px;
+
+  line-height: 1.5;
+}
+
+.popup-btn {
+  width: 120px;
+  height: 45px;
+
+  border: none;
+
+  border-radius: 10px;
+
+  background: #00a5e3;
+
+  color: white;
+
+  font-size: 16px;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.popup-btn:hover {
+  background: #008fd1;
+
+  transform: translateY(-2px);
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 768px) {
+
+  .corner-left {
+    width: 180px;
+    height: 130px;
+  }
+
+  .corner-right-ribbon {
+    width: 160px;
+  }
+
+  .routine-back-btn {
+    top: 25px;
+    left: 20px;
+
+    width: 46px;
+    height: 46px;
+
+    font-size: 17px;
+  }
+
+  .routine-container {
+    width: 90%;
+
+    padding-top: 90px;
+    padding-bottom: 140px;
+  }
+
+  .routine-container h1 {
+    font-size: 34px;
+  }
+
+  .routine-line {
+    margin-top: 15px;
+    margin-bottom: 25px;
+  }
+
+  .device-select {
+    width: 100%;
+  }
+
+  .routine-option {
+    min-height: 65px;
+
+    padding: 0 18px;
+  }
+
+  .card-left {
+    gap: 13px;
+  }
+
+  .card-left span {
+    font-size: 18px;
+  }
+
+  .card-left .weather,
+  .card-left .clock {
+    font-size: 21px;
+  }
+
+  .add-btn {
+    right: 20px;
+
+    bottom: 80px;
+
+    width: 120px;
+    height: 46px;
+
+    font-size: 16px;
+  }
+
+  .sub-page-header h2 {
+    font-size: 28px;
+  }
+
+  .small-back-btn {
+    width: 45px;
+    height: 45px;
+  }
+
+  .weather-options {
+    grid-template-columns: 1fr;
+
+    gap: 14px;
+  }
+
+  .weather-option {
+    min-height: 75px;
+
+    padding: 15px 18px;
+  }
+
+  .weather-option-icon {
+    width: 48px;
+    height: 48px;
+
+    font-size: 22px;
+
+    margin-right: 15px;
+  }
+
+  .weather-option span {
+    font-size: 18px;
+  }
+
+  .time-input-box {
+    height: 62px;
+  }
+
+  .time-input-box
+  .react-time-picker__wrapper {
+    height: 60px;
+  }
+
+  .time-input-box
+  .react-time-picker__inputGroup__input {
+    font-size: 24px;
+  }
+
+  .popup {
+    padding: 25px;
+  }
+}

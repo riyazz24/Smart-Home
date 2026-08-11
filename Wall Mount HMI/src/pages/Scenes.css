@@ -1,0 +1,379 @@
+/* =========================================
+   MAIN CONTAINER
+========================================= */
+
+.scenes-container {
+    min-height: 100vh;
+    background: #fafafa;
+    padding: 40px 55px;
+    position: relative;
+    font-family: "Segoe UI", sans-serif;
+}
+
+
+/* =========================================
+   CORNER DESIGN
+========================================= */
+
+.corner-design {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+
+/* =========================================
+   HEADER / TITLE
+========================================= */
+
+.scenes-header {
+    height: 18px;
+    display: flex;
+    align-items: center;
+    padding-right: 75%;
+}
+
+.scenes-title {
+    margin: 250px auto 0;
+    font-size: 35px;
+    font-weight: 400;
+    color: #111;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+
+/* =========================================
+   EMPTY STATE
+========================================= */
+
+.empty-state {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    margin-top: 2px;
+    margin-bottom: 5px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.background-svg {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+
+/* =========================================
+   FORM
+========================================= */
+
+.scene-form {
+    width: 500px;
+    background: white;
+    border-radius: 18px;
+    padding: 30px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    margin-bottom: 35px;
+}
+
+.scene-form h3 {
+    margin-bottom: 16px;
+    font-size: 24px;
+    font-weight: 500;
+}
+
+.scene-form input {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #d7d7d7;
+    border-radius: 10px;
+    outline: none;
+    font-size: 17px;
+    box-sizing: border-box;
+}
+
+.save-btn {
+    margin-top: 20px;
+    background: #00b4ff;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 13px 26px;
+    font-size: 17px;
+    cursor: pointer;
+}
+
+
+/* =========================================
+   SCENE CARD
+========================================= */
+
+.scene-card {
+    width: 90%;
+    height: 78px;
+
+    margin: 28px auto;
+
+    background: #d9d9d9;
+    border-radius: 8px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 0 40px;
+}
+
+.scene-name {
+    font-size: 28px;
+    font-weight: 400;
+    color: #111;
+}
+
+.scene-actions {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+}
+
+.scene-card .action-svg {
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+}
+
+.scene-card .delete-icon {
+    font-size: 30px;
+    color: #A31919;
+    cursor: pointer;
+}
+
+
+/* =========================================
+   ADD BUTTON
+========================================= */
+
+.add-btn {
+    position: fixed;
+    right: 45px;
+    bottom: 40px;
+
+    background: #03bafc;
+    color: white;
+
+    border: none;
+    border-radius: 14px;
+
+    padding: 15px 28px;
+
+    font-size: 22px;
+    font-weight: 500;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.add-btn:hover {
+    transform: scale(1.05);
+}
+
+
+/* =========================================
+   HORIZONTAL LINE
+========================================= */
+
+.horizontal-line {
+    width: 100vw;
+
+    position: fixed;
+    left: 50%;
+    right: 50%;
+
+    margin-left: -50vw;
+    margin-right: -50vw;
+
+    border: none;
+    border-bottom: 1px solid #000;
+
+    margin-top: 10px;
+    margin-bottom: 0;
+}
+
+
+/* =========================================
+   TABLE
+========================================= */
+
+.table-wrapper {
+    width: 80%;
+    margin: 25px auto;
+}
+
+.scene-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+
+/* =========================================
+   TABLE HEADER
+========================================= */
+
+.scene-table thead tr {
+    background: #1f1f1f;
+}
+
+.scene-table thead th {
+    color: #fff;
+
+    padding: 8px 10px;
+
+    text-align: center;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    vertical-align: middle;
+}
+
+
+/* =========================================
+   TABLE ROW
+========================================= */
+
+.scene-table tbody tr {
+    background: #dddddd;
+
+    height: 50px;
+
+    border-bottom: 1px solid #222;
+}
+
+.scene-table tbody td {
+    height: 50px;
+
+    padding: 0 10px;
+
+    text-align: center;
+    vertical-align: middle;
+
+    font-size: 13px;
+    color: #111;
+}
+
+
+/* =========================================
+   ACTIONS COLUMN
+========================================= */
+
+.actions-cell {
+    text-align: center !important;
+    vertical-align: middle !important;
+
+    padding: 0 !important;
+}
+
+
+/* =========================================
+   ACTION BUTTON GROUP
+========================================= */
+
+.action-buttons {
+    display: flex !important;
+
+    flex-direction: row !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    /* IMPORTANT:
+       keeps the 3 icons as one small group */
+    width: fit-content !important;
+
+    /* Centers the entire group inside the cell */
+    margin: 0 auto !important;
+
+    gap: 12px !important;
+
+    height: 50px;
+}
+
+
+/* =========================================
+   SETTINGS + EDIT ICON
+========================================= */
+
+.action-buttons .action-svg {
+    width: 16px !important;
+    height: 16px !important;
+
+    max-width: 16px !important;
+    max-height: 16px !important;
+
+    object-fit: contain;
+
+    display: block;
+
+    cursor: pointer;
+}
+
+
+/* =========================================
+   DELETE ICON
+========================================= */
+
+.action-buttons .delete-icon {
+    width: 22px !important;
+    height: 22px !important;
+
+    max-width: 22px !important;
+    max-height: 22px !important;
+
+    min-width: 22px !important;
+    min-height: 22px !important;
+
+    display: block !important;
+padding-top: 10px;
+    color: #ef3333;
+
+    cursor: pointer;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 900px) {
+
+    .table-wrapper {
+        width: 90%;
+    }
+
+    .scenes-title {
+        font-size: 30px;
+    }
+
+    .add-btn {
+        right: 25px;
+        bottom: 30px;
+        font-size: 18px;
+        padding: 12px 22px;
+    }
+}
+/* Move DELETE icon slightly down */
+.action-buttons .delete-icon {
+  position: relative;
+  top: 5px;
+}

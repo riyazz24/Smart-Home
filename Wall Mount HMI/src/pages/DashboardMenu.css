@@ -1,0 +1,280 @@
+/* ========================= */
+/* PAGE */
+/* ========================= */
+
+.menu-page {
+  min-height: 100vh;
+  background: #fafafa;
+  position: relative;
+  overflow-x: hidden;
+  padding-bottom: 90px;
+}
+
+/* ========================= */
+/* TOP CORNERS */
+/* ========================= */
+
+.menu-corner-left {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width:250px;      /* adjust between 145-165px if needed */
+ 
+}
+
+.menu-triangle {
+  position: absolute;
+  top: 0;
+    width:250px;      /* adjust between 145-165px if needed */
+  height:auto;
+  right: 0;
+  z-index: 5;
+}
+
+/* ========================= */
+/* BACK BUTTON */
+/* ========================= */
+
+.menu-back-btn {
+  position: absolute;
+  top: 120px;
+  left: 45px;
+
+  width: 55px;
+  height: 55px;
+
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.menu-back-btn img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* ========================= */
+/* MENU GRID */
+/* ========================= */
+
+.menu-grid {
+  width: 70%;
+
+  margin: 170px auto 0;
+
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 55px 80px;
+
+  justify-items: center;
+}
+
+/* ========================= */
+/* MENU CARDS */
+/* ========================= */
+
+.menu-card{
+  width:180px;
+  height:72px;
+
+  background:#fff;
+
+  border:1px solid #d8d8d8;
+  border-radius:22px;
+
+  box-shadow:0 4px 10px rgba(0,0,0,.12);
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:10px;
+
+  cursor:pointer;
+
+  transition:.2s;
+}
+
+.menu-card img{
+  width:22px;
+  height:22px;
+  object-fit:contain;
+}
+
+.menu-card span{
+  font-size:20px;
+  font-weight:600;
+  color:#111;
+}
+
+.menu-card:hover{
+  transform:translateY(-3px);
+}
+/* Last Row Center */
+
+.menu-card:nth-child(4) {
+  grid-column: 1 / span 1;
+  justify-self: end;
+}
+
+.menu-card:nth-child(5) {
+  grid-column: 3 / span 1;
+  justify-self: start;
+}
+
+/* ========================= */
+/* BULB */
+/* ========================= */
+
+.menu-lightbulb {
+  position: fixed;
+
+  right: 55px;
+  bottom: 90px;
+
+  width: 85px;
+
+  z-index: 100;
+}
+
+/* ========================= */
+/* CIRCLES */
+/* ========================= */
+
+.menu-pink-circle {
+  position: fixed;
+
+  right: 55px;
+  bottom: -45px;
+
+  width: 130px;
+  height: 130px;
+
+  border-radius: 50%;
+
+  background: #f06767;
+
+  z-index: 4;
+}
+
+.menu-red-circle {
+  position: fixed;
+
+  right: -45px;
+  bottom: -55px;
+
+  width: 150px;
+  height: 150px;
+
+  border-radius: 50%;
+
+  background: #c70019;
+
+  z-index: 5;
+}
+
+/* ========================= */
+/* NAVBAR */
+/* ========================= */
+
+.menu-navbar-wrapper {
+  position: fixed;
+
+  left: 0;
+  bottom: 0;
+
+  width: 100%;
+  height: 72px;
+
+  z-index: 999;
+}
+
+.menu-navbar-bg {
+  position: absolute;
+
+  left: 0;
+  bottom: 0;
+
+  width: 100%;
+  height: 72px;
+
+  object-fit: cover;
+}
+
+/* ========================= */
+/* NAV BUTTONS */
+/* ========================= */
+
+.menu-nav-btn {
+  position: absolute;
+
+  bottom: 8px;
+
+  background: transparent;
+  border: none;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  cursor: pointer;
+}
+
+.menu-nav-btn img {
+  width: 30px;
+  height: 30px;
+}
+
+.menu-nav-btn span {
+  margin-top: 4px;
+
+  font-size: 12px;
+  font-weight: 500;
+
+  color: #666;
+}
+
+/* Positions */
+
+.menu-home-btn {
+  left: 70px;
+}
+
+.menu-scheduler-btn {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.menu-profile-btn {
+  right: 70px;
+}
+
+/* Active Page */
+
+.menu-active span {
+  color: #03BAFC;
+  font-weight: 700;
+}
+
+/* ========================= */
+/* RESPONSIVE */
+/* ========================= */
+
+@media (max-width: 900px) {
+
+  .menu-grid {
+    width: 90%;
+    gap: 35px;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .menu-card {
+    width: 170px;
+  }
+
+  .menu-card:nth-child(4),
+  .menu-card:nth-child(5) {
+    grid-column: auto;
+    justify-self: center;
+  }
+}

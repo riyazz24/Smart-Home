@@ -1,0 +1,115 @@
+.loading-page {
+  min-height: 100vh;
+  background: #fafafa;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ------------------ */
+/* Corner Designs */
+/* ------------------ */
+
+.loading-corner-left {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.loading-triangle-design {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+/* ------------------ */
+/* Center Loading */
+/* ------------------ */
+
+.loading-content {
+  min-height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.loading-icon {
+  width: 230px;
+  height: auto;
+}
+
+.loading-text {
+  margin-top: 35px;
+
+  font-size: 24px;
+  font-weight: 400;
+  text-align: center;
+
+  color: #111;
+}
+
+/* ------------------ */
+/* Bottom Right */
+/* ------------------ */
+
+.loading-bottom-right-design {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+/* Pink Circle */
+
+.loading-pink-circle {
+  width: 110px;
+  height: 110px;
+
+  border-radius: 50%;
+
+  background: #f35d5d;
+
+  position: absolute;
+  bottom: -40px;
+  right: 60px;
+}
+
+/* Dark Red Circle */
+
+.loading-red-circle {
+  width: 110px;
+  height: 110px;
+
+  border-radius: 50%;
+
+  background: #c8001c;
+
+  position: absolute;
+  bottom: -40px;
+  right: -10px;
+}
+
+/* Light Bulb */
+
+.loading-circle-one {
+  position: absolute;
+
+  width: 170px;
+  height: 170px;
+
+  border-radius: 50%;
+
+  right: 40px;
+  bottom: -60px;
+}
+
+.loading-lightbulb {
+  position: absolute;
+
+  right: 20px;
+  top: -90px;
+
+  width: 75px;
+
+  z-index: 5;
+}

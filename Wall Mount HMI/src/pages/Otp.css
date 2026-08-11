@@ -1,0 +1,154 @@
+@import "./SignUp.css";
+
+.otp-page{
+    width:100%;
+    min-height:100vh;
+    background:#fff;
+    overflow:hidden;
+    position:relative;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+.otp-section{
+
+    margin-top:110px;
+
+    width:100%;
+    min-height:calc(100vh - 210px);
+
+    background:#DCECEF;
+
+    border-top-left-radius:45% 120px;
+
+    display:flex;
+    justify-content:center;
+
+    position:relative;
+}
+
+.otp-card{
+
+    width:520px;
+
+    margin-top:120px;
+
+    text-align:center;
+}
+
+/* Heading */
+
+.otp-heading{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:flex-start;
+
+    gap:18px;
+}
+
+.otp-heading svg{
+
+    font-size:34px;
+
+    margin-top:6px;
+}
+
+.otp-title{
+
+    text-align:left;
+}
+
+.otp-title h2{
+
+    font-size:30px;
+
+    font-weight:400;
+
+    color:#777;
+
+    line-height:1.3;
+}
+
+.otp-title span{
+
+    color:#000;
+
+    font-weight:600;
+}
+
+/* OTP Boxes */
+
+.otp-inputs{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:40px;
+
+    margin:20px 0 60px;
+}
+
+.otp-inputs input{
+
+    width:52px;
+
+    height:60px;
+
+    font-size:34px;
+
+    text-align:center;
+
+    border:none;
+
+    border-bottom:2px solid #777;
+
+    background:transparent;
+
+    outline:none;
+}
+
+.otp-inputs input:focus{
+
+    border-bottom-color:#7678ED;
+}
+
+/* Button */
+
+.otp-card .primary-btn{
+
+    width:200px;
+
+    height:45px;
+
+    font-size:16px;
+
+    margin:0 auto;
+}
+
+/* Footer */
+
+.otp-footer{
+
+    margin-top:55px;
+}
+
+.otp-footer p{
+
+    color:#888;
+
+    font-size:18px;
+
+    margin-bottom:10px;
+}
+
+.otp-footer span{
+
+    font-size:18px;
+
+    font-weight:500;
+
+    cursor:pointer;
+}
