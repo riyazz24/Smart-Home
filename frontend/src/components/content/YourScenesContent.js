@@ -5,7 +5,7 @@ import { FiPower, FiEdit2, FiTrash2, FiCalendar } from 'react-icons/fi';
 import axiosInstance from '../../util/AxiosInstance';
 import ModalLayout from '../layout/ModalLayout';
 import { listThings } from '../../util/ThingApi';
-import { DAYS, parseCronExpression, formatDateForDisplay } from '../../util/CronUtil';
+import { DAYS, parseCronExpression, formatDateForDisplay, parseDatesFromCronExpression } from '../../util/CronUtil';
 
 // GET /rule/list returns [{ ruleUid, ruleName, status, triggerJson, actionsJson }].
 // triggerJson / actionsJson are JSON strings - parse each scene once up front
@@ -26,7 +26,7 @@ const parseScene = (scenesObj) => {
         actions = [];
     }
     const { time, days } = parseCronExpression(trigger.cronExpression);
-    const dates = Array.isArray(trigger.dates) ? trigger.dates : [];
+    const dates = parseDatesFromCronExpression(trigger.cronExpression);
     const firstAction = actions[0] || {};
     return { time, days, dates, itemName: firstAction.itemName, command: firstAction.command };
 };

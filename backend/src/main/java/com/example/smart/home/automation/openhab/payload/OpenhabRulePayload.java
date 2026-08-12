@@ -35,14 +35,12 @@ public class OpenhabRulePayload {
 
     private String errorMessage;
 
-//    @JsonIgnoreProperties(ignoreUnknown = true)
     @Data
     public static class TriggerPayload {
         private String type;
         private String cronExpression;
         private String itemName;
         private String state;
-        private List<String> dates;
     }
 
     @Data

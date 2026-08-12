@@ -4,7 +4,7 @@ import { FiCalendar, FiX } from 'react-icons/fi';
 import axiosInstance from '../../util/AxiosInstance';
 import ModalLayout from '../layout/ModalLayout';
 import { listThings } from '../../util/ThingApi';
-import { DAYS, buildCronExpression, formatDateForDisplay } from '../../util/CronUtil';
+import { DAYS, buildCronExpression, buildCronExpressionsForDates, formatDateForDisplay } from '../../util/CronUtil';
 
 
 export default function CreateScenesContent() {
@@ -12,7 +12,7 @@ export default function CreateScenesContent() {
     const [ruleName, setRuleName] = useState('');
     const [time, setTime] = useState('');
     const [dateInput, setDateInput] = useState('');
-    const [selectedDates, setSelectedDates] = useState([]); // ["2025-06-25", "2025-06-27", ...]
+    const [selectedDates, setSelectedDates] = useState([]);
     const [selectedDays, setSelectedDays] = useState([]);
     const [device, setDevice] = useState('');
     const [command, setCommand] = useState('ON');
@@ -48,18 +48,12 @@ export default function CreateScenesContent() {
         fetchDevices();
     }, [navigate]);
 
-    // Picking a date adds it to the selected-dates list (instead of replacing
-    // a single value) and auto-checks the matching day-of-week button below,
-    // e.g. picking a Wednesday auto-checks "Wed". The day buttons stay
-    // editable afterwards in case the scene should also repeat on other days.
-    // The date input itself is cleared right after so the same control can be
-    // used to add the next date.
     const handleDateChange = (value) => {
         if (!value) return;
 
         setSelectedDates((prev) => (prev.includes(value) ? prev : [...prev, value].sort()));
 
-        const weekdayIndex = new Date(`${value}T00:00:00`).getDay(); // 0=Sun ... 6=Sat, matches DAYS order
+        const weekdayIndex = new Date(`${value}T00:00:00`).getDay();
         const matchingDay = days[weekdayIndex]?.full;
         if (matchingDay) {
             setSelectedDays((prev) => (prev.includes(matchingDay) ? prev : [...prev, matchingDay]));
@@ -83,7 +77,10 @@ export default function CreateScenesContent() {
             navigate('/');
             return;
         }
-        if (!ruleName || !time || selectedDates.length === 0 || selectedDays.length === 0 || !device || !command) {
+
+        const hasDates = selectedDates.length > 0;
+        const hasDays = selectedDays.length > 0;
+        if (!ruleName || !time || (!hasDates && !hasDays) || !device || !command) {
             setModal({
                 show: true,
                 title: 'Error',
@@ -94,26 +91,44 @@ export default function CreateScenesContent() {
             return;
         }
 
-        const rulePayload = {
+        const cronExpressions = hasDates
+            ? buildCronExpressionsForDates(time, selectedDates)
+            : [buildCronExpression(time, selectedDays)];
+
+        if (cronExpressions.length === 0 || cronExpressions.some((c) => !c)) {
+            setModal({
+                show: true,
+                title: 'Error',
+                message: <span className='text-danger'>Could not build a valid schedule from the selected date/time.</span>,
+                isError: true,
+                onConfirm: () => setModal({ ...modal, show: false }),
+            });
+            return;
+        }
+
+        const buildRulePayload = (cronExpression) => ({
             ruleName,
             triggerPayload: {
                 type: 'TIME',
-                cronExpression: buildCronExpression(time, selectedDays),
+                cronExpression,
                 itemName: null,
                 state: null,
-                dates: selectedDates,
             },
             actionPayloadList: [
                 { itemName: device, command },
             ],
-        };
+        });
 
         try {
-            const { data } = await axiosInstance.post('/rule/create', rulePayload);
+            let lastMessage = '';
+            for (const cronExpression of cronExpressions) {
+                const { data } = await axiosInstance.post('/rule/create', buildRulePayload(cronExpression));
+                lastMessage = data.message;
+            }
             setModal({
                 show: true,
                 title: 'Success',
-                message: data.message,
+                message: lastMessage,
                 isError: false,
                 onConfirm: () => {
                     setModal({ ...modal, show: false });

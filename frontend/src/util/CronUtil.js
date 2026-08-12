@@ -42,3 +42,54 @@ export const formatDateForDisplay = (isoDate) => {
     if (!year || !month || !day) return isoDate;
     return `${day}/${month}/${year}`;
 };
+
+export const buildCronExpressionsForDates = (time24h, dateList) => {
+    if (!time24h || !Array.isArray(dateList) || dateList.length === 0) return [];
+
+    const [hourStr, minuteStr] = time24h.split(':');
+    const hour = parseInt(hourStr, 10);
+    const minute = parseInt(minuteStr, 10);
+    if (Number.isNaN(hour) || Number.isNaN(minute)) return [];
+
+    const groupsByYearMonth = new Map(); // "YYYY-M" -> { year, month, days: Set<number> }
+
+    dateList.forEach((isoDate) => {
+        if (!isoDate) return;
+        const [yearStr, monthStr, dayStr] = isoDate.split('-');
+        const year = parseInt(yearStr, 10);
+        const month = parseInt(monthStr, 10);
+        const day = parseInt(dayStr, 10);
+        if (Number.isNaN(year) || Number.isNaN(month) || Number.isNaN(day)) return;
+
+        const key = `${year}-${month}`;
+        if (!groupsByYearMonth.has(key)) {
+            groupsByYearMonth.set(key, { year, month, days: new Set() });
+        }
+        groupsByYearMonth.get(key).days.add(day);
+    });
+
+    return Array.from(groupsByYearMonth.values())
+        .sort((a, b) => (a.year - b.year) || (a.month - b.month))
+        .map(({ year, month, days }) => {
+            const dayField = Array.from(days).sort((a, b) => a - b).join(',');
+            return `0 ${minute} ${hour} ${dayField} ${month} ? ${year}`;
+        });
+};
+
+export const parseDatesFromCronExpression = (cronExpression) => {
+    if (!cronExpression) return [];
+    const parts = cronExpression.trim().split(/\s+/);
+    if (parts.length < 7) return [];
+    const [, , , dayOfMonthField, monthField, , yearField] = parts;
+    if (!dayOfMonthField || dayOfMonthField === '?' || dayOfMonthField === '*') return [];
+
+    const month = parseInt(monthField, 10);
+    const year = parseInt(yearField, 10);
+    if (Number.isNaN(month) || Number.isNaN(year)) return [];
+
+    return dayOfMonthField
+        .split(',')
+        .map((d) => parseInt(d, 10))
+        .filter((d) => !Number.isNaN(d))
+        .map((day) => `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`);
+};
