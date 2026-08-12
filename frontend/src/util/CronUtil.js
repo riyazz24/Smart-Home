@@ -43,6 +43,19 @@ export const formatDateForDisplay = (isoDate) => {
     return `${day}/${month}/${year}`;
 };
 
+// Builds Quartz cron expression(s) for one or more explicit calendar dates
+// (as opposed to a recurring day-of-week schedule). Quartz field order:
+// second minute hour day-of-month month ? year
+//
+// "19:02" + ["2026-08-12"] -> ["0 2 19 12 8 ? 2026"]
+// "19:02" + ["2026-08-12", "2026-08-15", "2026-08-20"] -> ["0 2 19 12,15,20 8 ? 2026"]
+//
+// Dates that fall in different months and/or years cannot be safely combined
+// into a single day-of-month field (e.g. "12,15" across two different months
+// would fire on the 12th AND 15th of both months). So dates are grouped by
+// (year, month) and one cron expression is produced per group, each carrying
+// only the days that belong to that exact month/year - this guarantees the
+// generated cron never fires on a date the user didn't select.
 export const buildCronExpressionsForDates = (time24h, dateList) => {
     if (!time24h || !Array.isArray(dateList) || dateList.length === 0) return [];
 
@@ -74,6 +87,18 @@ export const buildCronExpressionsForDates = (time24h, dateList) => {
             const dayField = Array.from(days).sort((a, b) => a - b).join(',');
             return `0 ${minute} ${hour} ${dayField} ${month} ? ${year}`;
         });
+};
+
+export const getWeekdaysForDates = (dateList) => {
+    if (!Array.isArray(dateList) || dateList.length === 0) return [];
+    const weekdays = dateList
+        .map((isoDate) => {
+            const parsed = new Date(`${isoDate}T00:00:00`);
+            if (Number.isNaN(parsed.getTime())) return null;
+            return DAYS[parsed.getDay()]?.full;
+        })
+        .filter(Boolean);
+    return Array.from(new Set(weekdays));
 };
 
 export const parseDatesFromCronExpression = (cronExpression) => {

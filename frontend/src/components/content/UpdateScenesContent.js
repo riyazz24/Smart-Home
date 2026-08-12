@@ -4,7 +4,7 @@ import { FiCalendar, FiX } from 'react-icons/fi';
 import axiosInstance from '../../util/AxiosInstance';
 import ModalLayout from '../layout/ModalLayout';
 import { listThings } from '../../util/ThingApi';
-import { DAYS, parseCronExpression, parseDatesFromCronExpression, formatDateForDisplay } from '../../util/CronUtil';
+import { DAYS, parseCronExpression, parseDatesFromCronExpression, getWeekdaysForDates, formatDateForDisplay } from '../../util/CronUtil';
 
 export default function UpdateSceneContent() {
     const location = useLocation();
@@ -29,7 +29,7 @@ export default function UpdateSceneContent() {
 
     const initialDates = parseDatesFromCronExpression(parsedTrigger.cronExpression);
     const { time: initialTime, days: initialDaysFromCron } = parseCronExpression(parsedTrigger.cronExpression);
-    const initialDays = initialDates.length > 0 ? [] : initialDaysFromCron;
+    const initialDays = initialDates.length > 0 ? getWeekdaysForDates(initialDates) : initialDaysFromCron;
     const firstAction = parsedActions[0] || {};
 
     const [deviceList, setDeviceList] = useState([]);

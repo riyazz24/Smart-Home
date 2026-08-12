@@ -202,7 +202,7 @@ export default function CreateScenesContent() {
                         )}
                     </div>
 
-                    <div className="mb-4">
+                    {/* <div className="mb-4">
                         <div className="form-label fw-bold">Day</div>
                         <div className="d-flex flex-wrap gap-2">
                             {days.map(({ short, full }) => (
@@ -216,7 +216,7 @@ export default function CreateScenesContent() {
                                 </button>
                             ))}
                         </div>
-                    </div>
+                    </div> */}
 
                     <div className="mb-4">
                         <div className="form-label fw-bold">Devices</div>
