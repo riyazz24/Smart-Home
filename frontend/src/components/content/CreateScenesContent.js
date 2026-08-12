@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiCalendar, FiX } from 'react-icons/fi';
@@ -12,7 +13,7 @@ export default function CreateScenesContent() {
     const [ruleName, setRuleName] = useState('');
     const [time, setTime] = useState('');
     const [dateInput, setDateInput] = useState('');
-    const [selectedDates, setSelectedDates] = useState([]);
+    const [selectedDates, setSelectedDates] = useState([]); // ["2025-06-25", "2025-06-27", ...]
     const [selectedDays, setSelectedDays] = useState([]);
     const [device, setDevice] = useState('');
     const [command, setCommand] = useState('ON');
@@ -53,7 +54,7 @@ export default function CreateScenesContent() {
 
         setSelectedDates((prev) => (prev.includes(value) ? prev : [...prev, value].sort()));
 
-        const weekdayIndex = new Date(`${value}T00:00:00`).getDay();
+        const weekdayIndex = new Date(`${value}T00:00:00`).getDay(); // 0=Sun ... 6=Sat, matches DAYS order
         const matchingDay = days[weekdayIndex]?.full;
         if (matchingDay) {
             setSelectedDays((prev) => (prev.includes(matchingDay) ? prev : [...prev, matchingDay]));
@@ -77,7 +78,8 @@ export default function CreateScenesContent() {
             navigate('/');
             return;
         }
-
+        // A scene needs either specific dates or recurring days to know when
+        // to fire - not necessarily both.
         const hasDates = selectedDates.length > 0;
         const hasDays = selectedDays.length > 0;
         if (!ruleName || !time || (!hasDates && !hasDays) || !device || !command) {
