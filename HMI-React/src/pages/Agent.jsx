@@ -2,20 +2,14 @@ import "./Agent.css";
 
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState, useCallback } from "react";
-
 import triangleDesign from "../assets/triangle design.svg";
 import lightbulb from "../assets/Lightbulb.svg";
 import bottomNavbar from "../assets/bottom bar 1.svg";
-
-import homeIcon from "../assets/home1.svg";
-import schedulerIcon from "../assets/Smart.svg";
-import userIcon from "../assets/User.svg";
-
-import backIcon from "../assets/back.svg";
-
+import { Home, CalendarClock, User, ArrowLeft, Lightbulb } from "lucide-react";
 import agentOnline from "../assets/AgentOnline.svg";
 import agentOffline from "../assets/AgentOffline.svg";
 import { ensureAgentId } from "../util/AgentApi";
+import BottomNavigation from "../components/BottomNavigation";
 
 function Agent() {
 
@@ -86,7 +80,7 @@ function Agent() {
         className="back-btn"
         onClick={() => navigate("/dashboard-menu")}
       >
-        <img src={backIcon} alt="" />
+        <ArrowLeft size={24} />
       </button>
 
       {/* Whole Card SVG */}
@@ -127,7 +121,7 @@ function Agent() {
           className="nav-item nav-home"
           onClick={() => navigate("/dashboard")}
         >
-          <img src={homeIcon} alt="" />
+          <Home size={30} />
           <span>Home</span>
         </button>
 
@@ -135,7 +129,7 @@ function Agent() {
           className="nav-item nav-scheduler"
           onClick={() => navigate("/scheduler")}
         >
-          <img src={schedulerIcon} alt="" />
+          <CalendarClock size={30} />
           <span>Scheduler</span>
         </button>
 
@@ -143,7 +137,7 @@ function Agent() {
           className="nav-item nav-profile"
           onClick={() => navigate("/profile")}
         >
-          <img src={userIcon} alt="" />
+          <User size={30} />
           <span>Profile</span>
         </button>
 

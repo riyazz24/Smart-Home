@@ -1,14 +1,10 @@
 import "./Dashboard.css";
 import { useNavigate } from "react-router-dom";
-
 import triangleDesign from "../assets/triangle design.svg";
 import lightbulb from "../assets/Lightbulb.svg";
 import dashboardImage from "../assets/dp.svg";
 import bottomNavbar from "../assets/bottom bar 1.svg";
-
-import homeIcon from "../assets/home1.svg";
-import schedulerIcon from "../assets/Smart.svg";
-import userIcon from "../assets/User.svg";
+import { Home, CalendarClock, User } from "lucide-react";
 
 function Dashboard() {
   const username = localStorage.getItem("name");
@@ -99,7 +95,6 @@ function Dashboard() {
       {/* Bottom Navigation */}
 
       <div className="dashboard-navbar-wrapper">
-
         {/* Navbar Background */}
 
         <img
@@ -114,7 +109,7 @@ function Dashboard() {
           className="dashboard-nav-btn dashboard-home-btn dashboard-active"
           onClick={() => navigate("/dashboard")}
         >
-          <img src={homeIcon} alt="Home" />
+          <Home size={30} />
           <span>Home</span>
         </button>
 
@@ -124,7 +119,7 @@ function Dashboard() {
           className="dashboard-nav-btn dashboard-scheduler-btn"
           onClick={() => navigate("/scheduler")}
         >
-          <img src={schedulerIcon} alt="Scheduler" />
+          <CalendarClock size={30} />
           <span>Scheduler</span>
         </button>
 
@@ -134,7 +129,7 @@ function Dashboard() {
           className="dashboard-nav-btn dashboard-profile-btn"
           onClick={() => navigate("/profile")}
         >
-          <img src={userIcon} alt="Profile" />
+          <User size={30} />
           <span>Profile</span>
         </button>
 

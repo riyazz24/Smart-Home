@@ -86,18 +86,20 @@
 
     justify-content:center;
 
-    gap:40px;
+    flex-wrap:wrap;
+
+    gap:20px;
 
     margin:20px 0 60px;
 }
 
 .otp-inputs input{
 
-    width:52px;
+    width:44px;
 
-    height:60px;
+    height:56px;
 
-    font-size:34px;
+    font-size:30px;
 
     text-align:center;
 
@@ -151,4 +153,37 @@
     font-weight:500;
 
     cursor:pointer;
+}
+
+/* Responsive */
+
+@media (max-width: 600px){
+
+    .otp-card{
+
+        width:100%;
+
+        padding:0 16px;
+
+        box-sizing:border-box;
+    }
+
+    .otp-title h2{
+
+        font-size:22px;
+    }
+
+    .otp-inputs{
+
+        gap:10px;
+    }
+
+    .otp-inputs input{
+
+        width:36px;
+
+        height:48px;
+
+        font-size:24px;
+    }
 }

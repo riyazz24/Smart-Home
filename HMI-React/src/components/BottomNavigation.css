@@ -59,7 +59,8 @@
 /* ICON */
 /* ========================= */
 
-.dashboard-nav-btn img {
+.dashboard-nav-btn img,
+.dashboard-nav-btn svg {
   width: 30px;
   height: 30px;
 
@@ -134,7 +135,8 @@
 /* HOVER */
 /* ========================= */
 
-.dashboard-nav-btn:hover img {
+.dashboard-nav-btn:hover img,
+.dashboard-nav-btn:hover svg {
   transform: scale(1.05);
 }
 /* ========================= */

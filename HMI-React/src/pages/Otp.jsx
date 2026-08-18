@@ -9,7 +9,7 @@ import axiosInstance from "../util/AxiosInstance";
 
 import { MdOutlineLockReset } from "react-icons/md";
 
-const OTP_LENGTH = 4;
+const OTP_LENGTH = 6;
 
 function Otp() {
   const navigate = useNavigate();

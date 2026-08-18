@@ -1,10 +1,12 @@
 import "./Scheduler.css";
 import { FaArrowRight } from "react-icons/fa";
+import { FaGears } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import livingRoom from "../assets/livingroom.svg";
-import settingsIcon from "../assets/settings.svg";
 import triangleDesign from "../assets/triangle design.svg";
 import BottomNavigation from "../components/BottomNavigation";
+import { ArrowLeft } from "lucide-react";
+
 function Scheduler() {
   const navigate = useNavigate();
 
@@ -36,15 +38,20 @@ function Scheduler() {
           strokeLinecap="round"
         />
       </svg>
-      </div>
       <img
         src={triangleDesign}
         alt="Triangle Design"
         className="triangle-design"
-      />
+        />
+        
+      <button className="back-btn" onClick={() => navigate("/dashboard-menu")}>
+        <ArrowLeft size={24} />
+      </button>
+
+        </div>
 
       {/* Title */}
-      <h1 className="scheduler-title">Scheduler</h1>
+      <h1 className="scheduler-title" style={{}}>Scheduler</h1>
 
       {/* Centre Image */}
       <div className="image-container">
@@ -56,7 +63,7 @@ function Scheduler() {
       {/* Description */}
       <div className="description">
         <div className="settings-icon">
-          <img src={settingsIcon} alt="Settings" className="settings-icon" />
+          <FaGears size={24} className="settings-icon" />
         </div>
 
         <div className="description-text">
@@ -67,13 +74,14 @@ function Scheduler() {
             more convenient and more efficient.
           </p>
         </div>
-        <BottomNavigation active="scheduler" />
       </div>
 
       {/* Next Button */}
       <button className="next-btn" onClick={() => navigate("/scenes")}>
         Next <FaArrowRight />
       </button>
+
+      <BottomNavigation active="scheduler" />
     </div>
   );
 }

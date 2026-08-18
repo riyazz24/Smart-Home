@@ -2,12 +2,9 @@ import "./RoomDetails.css";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState, useCallback } from "react";
 import triangleDesign from "../assets/triangle design.svg";
-import backIcon from "../assets/back.svg";
 import lightbulb from "../assets/Lightbulb.svg";
 import bottomNavbar from "../assets/bottom bar 1.svg";
-import homeIcon from "../assets/home1.svg";
-import schedulerIcon from "../assets/Smart.svg";
-import userIcon from "../assets/User.svg";
+import { ArrowLeft, Home, CalendarClock, User } from "lucide-react";
 import livingRoomIcon from "../assets/LivingRoom.svg";
 import { listRooms, createRoom, updateRoom, deleteRoom } from "../util/RoomApi";
 import { listThings, controlThing, updateThing, deleteThing } from "../util/ThingApi";
@@ -334,7 +331,7 @@ function RoomDetails() {
 
       {/* BACK BUTTON */}
       <button className="back-btn" onClick={() => navigate("/rooms")}>
-        <img src={backIcon} alt="" />
+        <ArrowLeft size={24} />
       </button>
 
       {/* MAIN CARD */}
@@ -608,21 +605,21 @@ function RoomDetails() {
           className="dashboard-nav-btn dashboard-home-btn"
           onClick={() => navigate("/dashboard")}
         >
-          <img src={homeIcon} alt="" />
+          <Home size={30} />
           <span>Home</span>
         </button>
         <button
           className="dashboard-nav-btn dashboard-scheduler-btn"
           onClick={() => navigate("/scheduler")}
         >
-          <img src={schedulerIcon} alt="" />
+          <CalendarClock size={30} />
           <span>Scheduler</span>
         </button>
         <button
           className="dashboard-nav-btn dashboard-profile-btn"
           onClick={() => navigate("/profile")}
         >
-          <img src={userIcon} alt="" />
+          <User size={30} />
           <span>Profile</span>
         </button>
       </div>

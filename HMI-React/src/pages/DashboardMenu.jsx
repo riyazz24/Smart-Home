@@ -3,18 +3,19 @@ import "./DashboardMenu.css";
 import { useNavigate } from "react-router-dom";
 
 import triangleDesign from "../assets/triangle design.svg";
-import backIcon from "../assets/back.svg";
-import lightbulb from "../assets/Lightbulb.svg";
-
 import bottomNavbar from "../assets/bottom bar 1.svg";
-import homeIcon from "../assets/home1.svg";
-import schedulerIcon from "../assets/Smart.svg";
-import userIcon from "../assets/User.svg";
-import agentIcon from "../assets/Agent.svg";
-import roomIcon from "../assets/Room.svg";
-import devicesIcon from "../assets/Devices.svg";
-import scheduleIcon from "../assets/Schedule.svg";
-import settingsIcon from "../assets/Setting.svg";
+import lightbulb from "../assets/Lightbulb.svg";
+import {
+  ArrowLeft,
+  Home,
+  CalendarClock,
+  User,
+  Bot,
+  DoorOpen,
+  MonitorSmartphone,
+  CalendarPlus,
+  Settings,
+} from "lucide-react";
 
 function DashboardMenu() {
 
@@ -63,7 +64,7 @@ function DashboardMenu() {
         className="menu-back-btn"
         onClick={() => navigate("/dashboard")}
       >
-        <img src={backIcon} alt="Back" />
+        <ArrowLeft size={24} />
       </button>
 
       {/* Menu Buttons */}
@@ -74,7 +75,7 @@ function DashboardMenu() {
           className="menu-card"
           onClick={() => navigate("/agent")}
         >
-         <img src={agentIcon} alt="Agent" />
+         <Bot size={32} />
   <span>Agent</span>
         </button>
 
@@ -82,7 +83,7 @@ function DashboardMenu() {
           className="menu-card"
           onClick={() => navigate("/rooms")}
         >
-          <img src={roomIcon} alt="Room" />
+          <DoorOpen size={32} />
   <span>Room</span>
         </button>
 
@@ -90,7 +91,7 @@ function DashboardMenu() {
           className="menu-card"
           onClick={() => navigate("/all-devices")}
         >
-            <img src={devicesIcon} alt="Devices" />
+            <MonitorSmartphone size={32} />
   <span>Devices</span>
         </button>
 
@@ -98,7 +99,7 @@ function DashboardMenu() {
           className="menu-card"
           onClick={() => navigate("/scheduler")}
         >
-           <img src={scheduleIcon} alt="Schedule" />
+           <CalendarPlus size={32} />
   <span>Schedule</span>
         </button>
 
@@ -106,19 +107,20 @@ function DashboardMenu() {
           className="menu-card"
           onClick={() => navigate("/profile")}
         >
-            <img src={settingsIcon} alt="Settings" />
+            <Settings size={32} />
   <span>Settings</span>
         </button>
 
       </div>
 
       {/* Bottom Decoration */}
-
-      <img
-        src={lightbulb}
-        alt="Bulb"
-        className="menu-lightbulb"
-      />
+      <div className="pairing-circle-one">
+        <img
+          src={lightbulb}
+          alt="lightbulb"
+          className="pairing-lightbulb"
+        />
+      </div>
 
       <div className="menu-pink-circle"></div>
       <div className="menu-red-circle"></div>
@@ -139,7 +141,7 @@ function DashboardMenu() {
   className="menu-nav-btn menu-home-btn menu-active"
   onClick={() => navigate("/dashboard")}
 >
-          <img src={homeIcon} alt="Home" />
+          <Home size={30} />
           <span>Home</span>
         </button>
 
@@ -149,7 +151,7 @@ function DashboardMenu() {
           className="menu-nav-btn menu-scheduler-btn"
           onClick={() => navigate("/scheduler")}
         >
-          <img src={schedulerIcon} alt="Scheduler" />
+          <CalendarClock size={30} />
           <span>Scheduler</span>
         </button>
 
@@ -159,7 +161,7 @@ function DashboardMenu() {
           className="menu-nav-btn menu-profile-btn"
           onClick={() => navigate("/profile")}
         >
-          <img src={userIcon} alt="Profile" />
+          <User size={30} />
           <span>Profile</span>
         </button>
 

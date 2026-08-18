@@ -2,11 +2,10 @@ import "./Loading.css";
 
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
-import osLoading from "../assets/os-loading.svg";
+// import osLoading from "../assets/os-loading.svg";
 import triangleDesign from "../assets/triangle design.svg";
 import lightbulb from "../assets/Lightbulb.svg";
-
+import { LoaderCircle } from "lucide-react";
 function Loading() {
   const navigate = useNavigate();
 
@@ -57,10 +56,9 @@ function Loading() {
       {/* Loading Content */}
       <div className="loading-content">
 
-        <img
-          src={osLoading}
-          alt="OS Loading"
+        <LoaderCircle
           className="loading-icon"
+          size={80}
         />
 
         <p className="loading-text">

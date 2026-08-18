@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Routine.css";
 
 import triangleDesign from "../assets/triangle design.svg";
@@ -8,17 +8,12 @@ import BottomNavigation from "../components/BottomNavigation";
 
 import {
   FaArrowLeft,
-  FaCloudSun,
   FaClock,
   FaChevronRight,
-  FaChevronDown,
   FaCalendarAlt,
   FaPlus,
-  FaCloudRain,
-  FaSun,
-  FaCloud,
-  FaBolt,
-  FaCheck
+  FaLightbulb,
+  FaPowerOff
 } from "react-icons/fa";
 
 import TimePicker from "react-time-picker";
@@ -28,57 +23,73 @@ import "react-clock/dist/Clock.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
+import { listThings } from "../util/ThingApi";
+import { createRule } from "../util/RuleApi";
+import { buildCronExpressionsForDates } from "../util/CronUtil";
+
 function Routine() {
   const navigate = useNavigate();
-  const location = useLocation();
-
-  const editMode = location.state?.edit || false;
-  const editIndex = location.state?.index;
 
   const [page, setPage] = useState("home");
 
-  const [device, setDevice] = useState("");
+  const [deviceList, setDeviceList] = useState([]);
+  const [device, setDevice] = useState(""); // holds the openHAB itemName
 
-  const [weather, setWeather] = useState("");
+  const [command, setCommand] = useState("ON");
 
   const [startTime, setStartTime] = useState("11:30");
-  const [endTime, setEndTime] = useState("12:30");
 
   const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
 
   const [showPopup, setShowPopup] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+  const [loadingDevices, setLoadingDevices] = useState(true);
+
+  const isLoggedIn = () => !!localStorage.getItem("sessionId");
 
   /* =========================
-     WEATHER OPTIONS
+     FETCH DEVICES (GET /thing/list)
   ========================= */
-
-  const weatherOptions = [
-    {
-      value: "Rain",
-      label: "Rain",
-      icon: <FaCloudRain />,
-      className: "weather-rain"
-    },
-    {
-      value: "Sunny",
-      label: "Sunny",
-      icon: <FaSun />,
-      className: "weather-sunny"
-    },
-    {
-      value: "Cloudy",
-      label: "Cloudy",
-      icon: <FaCloud />,
-      className: "weather-cloudy"
-    },
-    {
-      value: "Stormy",
-      label: "Stormy",
-      icon: <FaBolt />,
-      className: "weather-storm"
+  useEffect(() => {
+    if (!isLoggedIn()) {
+      navigate("/login");
+      return;
     }
-  ];
+    const fetchDevices = async () => {
+      setLoadingDevices(true);
+      try {
+        const { data, status } = await listThings();
+        if (status === 200) {
+          const mapped = (data.thingList || [])
+            .map((thing) => ({
+              itemName: thing.thingItemsListResponseList?.[0]?.itemName,
+              label: thing.label,
+            }))
+            .filter((d) => d.itemName);
+          setDeviceList(mapped);
+          // A device can exist (from /thing/create) before its openHAB item
+          // is actually linked on the agent side - it just won't have an
+          // itemName yet, so it gets filtered out above. Tell the user
+          // instead of silently showing an empty dropdown.
+          if (mapped.length === 0 && (data.thingList || []).length > 0) {
+            setError("Your device(s) aren't ready to be controlled yet - try again in a moment.");
+          } else if (mapped.length === 0) {
+            setError("You don't have any devices yet - add one from All Devices first.");
+          } else {
+            setError("");
+          }
+        }
+      } catch (err) {
+        setDeviceList([]);
+        setError(err.response?.data?.message || "Failed to fetch devices");
+      } finally {
+        setLoadingDevices(false);
+      }
+    };
+    fetchDevices();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   /* =========================
      DATE FORMAT
@@ -92,45 +103,58 @@ function Routine() {
     });
   };
 
+  const toIsoDate = (date) => {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, "0");
+    const d = String(date.getDate()).padStart(2, "0");
+    return `${y}-${m}-${d}`;
+  };
+
   /* =========================
-     SAVE ROUTINE
+     SAVE ROUTINE (POST /rule/create)
   ========================= */
 
-  const handleAdd = () => {
+  const handleAdd = async () => {
     if (device === "") {
+      setError("Please select a device first.");
       setPage("home");
       return;
     }
 
-    if (weather === "" && page !== "weather") {
-      setPage("weather");
+    // Build a Quartz cron expression for the single selected date/time -
+    // same helper the CRA reference app uses for date-based (as opposed to
+    // recurring-weekday) scenes.
+    const cronExpressions = buildCronExpressionsForDates(startTime, [toIsoDate(startDate)]);
+    if (cronExpressions.length === 0) {
+      setError("Could not build a valid schedule from the selected date/time.");
+      setPage("time");
       return;
     }
 
-    const newScene = {
-      device,
-      weather,
-      startDate: formatDate(startDate),
-      startTime,
-      endDate: formatDate(endDate),
-      endTime
-    };
+    setError("");
+    setSaving(true);
 
-    const oldScenes =
-      JSON.parse(localStorage.getItem("scenes")) || [];
-
-    if (editMode && editIndex !== undefined) {
-      oldScenes[editIndex] = newScene;
-    } else {
-      oldScenes.push(newScene);
+    try {
+      const { data } = await createRule({
+        ruleName: `${deviceList.find((d) => d.itemName === device)?.label || "Device"} ${command === "ON" ? "On" : "Off"} - ${formatDate(startDate)}`,
+        triggerPayload: {
+          type: "TIME",
+          cronExpression: cronExpressions[0],
+          itemName: null,
+          state: null,
+        },
+        actionPayloadList: [
+          { itemName: device, command },
+        ],
+      });
+      console.log(data?.message);
+      setShowPopup(true);
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to create scene. Please try again.");
+      setPage("home");
+    } finally {
+      setSaving(false);
     }
-
-    localStorage.setItem(
-      "scenes",
-      JSON.stringify(oldScenes)
-    );
-
-    setShowPopup(true);
   };
 
   /* =========================
@@ -151,28 +175,26 @@ function Routine() {
           e.target.blur();
         }}
       >
-        <option value="">Select Device</option>
-        <option value="Light">Light</option>
-        <option value="Fan">Fan</option>
-        <option value="AC">Air Conditioner</option>
-        <option value="TV">TV</option>
+        <option value="">{loadingDevices ? "Loading devices..." : "Select Device"}</option>
+        {deviceList.map((d) => (
+          <option key={d.itemName} value={d.itemName}>{d.label}</option>
+        ))}
       </select>
 
-      {/* WEATHER */}
+      {/* STATE (On/Off) - required by the backend's action payload;
+          "changes in weather" had no backend trigger type to save to
+          (RuleController only supports type:'TIME'), so this slot now
+          holds the ON/OFF command a scene actually needs. */}
 
       <div
-        className={`routine-option ${
-          weather ? "selected-option" : ""
-        }`}
-        onClick={() => setPage("weather")}
+        className="routine-option selected-option"
+        onClick={() => setPage("state")}
       >
         <div className="card-left">
-          <FaCloudSun className="weather" />
+          <FaPowerOff className="weather" />
 
           <span>
-            {weather
-              ? `Weather: ${weather}`
-              : "Changes in weather"}
+            State: {command === "ON" ? "Turn On" : "Turn Off"}
           </span>
         </div>
 
@@ -193,14 +215,18 @@ function Routine() {
 
         <FaChevronRight />
       </div>
+
+      {error && (
+        <p style={{ color: "#d10000", textAlign: "center", marginTop: "10px" }}>{error}</p>
+      )}
     </>
   );
 
   /* =========================
-     WEATHER PAGE
+     STATE PAGE (On/Off)
   ========================= */
 
-  const renderWeather = () => (
+  const renderState = () => (
     <>
       <div className="sub-page-header">
         <button
@@ -210,37 +236,38 @@ function Routine() {
           <FaArrowLeft />
         </button>
 
-        <h2>Select Weather</h2>
+        <h2>Select State</h2>
       </div>
 
       <div className="weather-options">
 
-        {weatherOptions.map((item) => (
-          <div
-            key={item.value}
-            className={`weather-option ${
-              weather === item.value
-                ? "weather-option-selected"
-                : ""
-            }`}
-            onClick={() => {
-              setWeather(item.value);
-              setPage("home");
-            }}
-          >
-            <div
-              className={`weather-option-icon ${item.className}`}
-            >
-              {item.icon}
-            </div>
-
-            <span>{item.label}</span>
-
-            {weather === item.value && (
-              <FaCheck className="weather-check" />
-            )}
+        <div
+          className={`weather-option ${command === "ON" ? "weather-option-selected" : ""}`}
+          onClick={() => {
+            setCommand("ON");
+            setPage("home");
+          }}
+        >
+          <div className="weather-option-icon weather-sunny">
+            <FaLightbulb />
           </div>
-        ))}
+
+          <span>Turn On</span>
+        </div>
+
+        <div
+          className={`weather-option ${command === "OFF" ? "weather-option-selected" : ""}`}
+          onClick={() => {
+            setCommand("OFF");
+            setPage("home");
+          }}
+        >
+          <div className="weather-option-icon weather-cloudy">
+            <FaPowerOff />
+          </div>
+
+          <span>Turn Off</span>
+        </div>
 
       </div>
     </>
@@ -294,37 +321,6 @@ function Routine() {
         <FaCalendarAlt />
       </div>
 
-      {/* END TIME */}
-
-      <div className="time-section">
-
-        <div className="time-section-title">
-          End Time
-        </div>
-
-        <div className="time-input-box">
-          <TimePicker
-            onChange={setEndTime}
-            value={endTime}
-            disableClock={true}
-            clearIcon={null}
-            format="h:mm a"
-          />
-        </div>
-
-      </div>
-
-      {/* END DATE */}
-
-      <div
-        className="date-input-box"
-        onClick={() => setPage("end-calendar")}
-      >
-        <span>{formatDate(endDate)}</span>
-
-        <FaCalendarAlt />
-      </div>
-
       <button
         className="time-done-btn"
         onClick={() => setPage("home")}
@@ -360,40 +356,6 @@ function Routine() {
           selected={startDate}
           onChange={(date) => {
             setStartDate(date);
-            setPage("time");
-          }}
-          inline
-        />
-
-      </div>
-    </>
-  );
-
-  /* =========================
-     END CALENDAR
-  ========================= */
-
-  const renderEndCalendar = () => (
-    <>
-      <div className="sub-page-header">
-
-        <button
-          className="small-back-btn"
-          onClick={() => setPage("time")}
-        >
-          <FaArrowLeft />
-        </button>
-
-        <h2>End Date</h2>
-
-      </div>
-
-      <div className="calendar-wrapper">
-
-        <DatePicker
-          selected={endDate}
-          onChange={(date) => {
-            setEndDate(date);
             setPage("time");
           }}
           inline
@@ -461,9 +423,9 @@ function Routine() {
 
         {page === "home" && renderHome()}
 
-        {/* WEATHER */}
+        {/* STATE */}
 
-        {page === "weather" && renderWeather()}
+        {page === "state" && renderState()}
 
         {/* TIME */}
 
@@ -474,11 +436,6 @@ function Routine() {
         {page === "start-calendar" &&
           renderStartCalendar()}
 
-        {/* END CALENDAR */}
-
-        {page === "end-calendar" &&
-          renderEndCalendar()}
-
       </div>
 
       {/* ADD BUTTON */}
@@ -487,9 +444,10 @@ function Routine() {
         <button
           className="add-btn"
           onClick={handleAdd}
+          disabled={saving}
         >
           <FaPlus />
-          Add
+          {saving ? "Adding..." : "Add"}
         </button>
       )}
 
@@ -505,15 +463,11 @@ function Routine() {
             </div>
 
             <h2>
-              {editMode
-                ? "Routine Updated"
-                : "Routine Added"}
+              Routine Added
             </h2>
 
             <p>
-              {editMode
-                ? "Your routine has been updated successfully."
-                : "Your routine has been created successfully."}
+              Your routine has been created successfully.
             </p>
 
             <button

@@ -1,9 +1,7 @@
 import "./Onboarding.css";
 import { useState } from "react";
 import OnboardingCard from "../components/OnbordingCard";
-
 import { useNavigate } from "react-router-dom";
-
 import house from "../assets/home.png";
 import wifi from "../assets/wifi.png";
 import lightbulb from "../assets/Lightbulb.svg";

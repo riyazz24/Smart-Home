@@ -1,12 +1,9 @@
 import { useState } from "react";
 import "./CreateScene.css";
-
 import { FaChevronDown, FaChevronUp, FaEdit, FaTrash } from "react-icons/fa";
 import horizontalLine from "../assets/horizontal-line.svg";
-import timeIcon from "../assets/time.svg";
-import weatherIcon from "../assets/weather.svg";
+import { Clock, Cloud } from "lucide-react";
 import { FaSnowflake, FaFan } from "react-icons/fa";
-// import cornerDesign from "../assets/corner-design.svg";
 import triangleDesign from "../assets/triangle design.svg";
 
 const CreateScene = () => {
@@ -89,7 +86,7 @@ const CreateScene = () => {
 
           <div className="condition-card">
             <div className="left-section">
-              <img src={timeIcon} alt="time" />
+              <Clock size={20} />
 
               <div>
                 <h3>Time</h3>
@@ -126,7 +123,7 @@ const CreateScene = () => {
 
           <div className="condition-card">
             <div className="left-section">
-              <img src={weatherIcon} alt="weather" />
+              <Cloud size={20} />
 
               <div>
                 <h3>Weather</h3>

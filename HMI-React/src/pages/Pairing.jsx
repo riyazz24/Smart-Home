@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import triangleDesign from "../assets/triangle design.svg";
 import lightbulb from "../assets/Lightbulb.svg";
+// import { Lightbulb } from "lucide-react";
 
 function Pairing() {
   const navigate = useNavigate();

@@ -4,12 +4,9 @@ import { useState, useEffect, useCallback } from 'react';
 import { listRooms, createRoom } from "../util/RoomApi";
 import { ensureAgentId } from "../util/AgentApi";
 import triangleDesign from "../assets/triangle design.svg";
-import backIcon from "../assets/back.svg";
 import lightbulb from "../assets/Lightbulb.svg";
 import bottomNavbar from "../assets/bottom bar 1.svg";
-import homeIcon from "../assets/home1.svg";
-import schedulerIcon from "../assets/Smart.svg";
-import userIcon from "../assets/User.svg";
+import { ArrowLeft, Home, CalendarClock, User } from "lucide-react";
 import roomEmpty from "../assets/RoomEmpty.svg";
 
 function Rooms() {
@@ -110,7 +107,7 @@ function Rooms() {
       <img src={triangleDesign} className="triangle-design" alt="" />
 
       <button className="back-btn" onClick={() => navigate("/dashboard-menu")}>
-        <img src={backIcon} alt="" />
+        <ArrowLeft size={24} />
       </button>
 
       <div className="room-card">
@@ -171,17 +168,17 @@ function Rooms() {
         <img src={bottomNavbar} className="dashboard-navbar-bg" alt="" />
 
         <button className="dashboard-nav-btn dashboard-home-btn" onClick={() => navigate("/dashboard")}>
-          <img src={homeIcon} alt="" />
+          <Home size={30} />
           <span>Home</span>
         </button>
 
         <button className="dashboard-nav-btn dashboard-scheduler-btn" onClick={() => navigate("/scheduler")}>
-          <img src={schedulerIcon} alt="" />
+          <CalendarClock size={30} />
           <span>Scheduler</span>
         </button>
 
         <button className="dashboard-nav-btn dashboard-profile-btn" onClick={() => navigate("/profile")}>
-          <img src={userIcon} alt="" />
+          <User size={30} />
           <span>Profile</span>
         </button>
       </div>
