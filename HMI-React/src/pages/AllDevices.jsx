@@ -1,6 +1,6 @@
 import "./AllDevices.css";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import BottomNavigation from "../components/BottomNavigation";
 import Switch from "react-switch";
@@ -9,15 +9,12 @@ import {
   FaArrowLeft,
   FaSearch,
   FaTv,
-  FaLightbulb,
-  FaFan,
-  FaLock,
   FaEdit,
   FaTrash,
   FaPlus,
-  FaHome,
-  FaUser
 } from "react-icons/fa";
+import { listThings, controlThing, updateThing, deleteThing } from "../util/ThingApi";
+import { ensureAgentId } from "../util/AgentApi";
 
 function AllDevices() {
 
@@ -27,46 +24,88 @@ function AllDevices() {
       CRUD STATES
   ------------------------------*/
 
-  const [devices, setDevices] = useState([
-    {
-      id:1,
-      icon:<FaTv />,
-      name:"Android TV",
-      room:"Living Room",
-      status:true
-    },
-    {
-      id:2,
-      icon:<FaLightbulb />,
-      name:"Smart Bulb",
-      room:"Bedroom",
-      status:false
-    },
-    {
-      id:3,
-      icon:<FaFan />,
-      name:"Smart Fan",
-      room:"Kitchen",
-      status:true
-    },
-    {
-      id:4,
-      icon:<FaLock />,
-      name:"Smart Lock",
-      room:"Main Door",
-      status:false
-    }
-  ]);
+  const [devices, setDevices] = useState([]);
+  const [loadingDevices, setLoadingDevices] = useState(true);
 
   const [deviceName,setDeviceName]=useState("");
-  const [roomName,setRoomName]=useState("");
 
   const [selectedDevice,setSelectedDevice]=useState(null);
 
-  const [showAdd,setShowAdd]=useState(false);
   const [showEdit,setShowEdit]=useState(false);
   const [showDelete,setShowDelete]=useState(false);
   const [showSuccess,setShowSuccess]=useState(false);
+  const [successMessage,setSuccessMessage]=useState("Action Completed Successfully");
+
+  const isLoggedIn = () => !!localStorage.getItem("sessionId");
+
+  /* =========================================
+      FETCH ALL DEVICES (GET /thing/list, no
+      roomId -> every device across every room,
+      same call CRA's AllDevicesContent.js makes)
+  ========================================= */
+  const fetchDevices = useCallback(async () => {
+    if (!isLoggedIn()) {
+      navigate("/login");
+      return;
+    }
+
+    setLoadingDevices(true);
+    try {
+      // Devices are agent-scoped (X-AgentId header) - make sure we have one
+      // resolved into localStorage before calling /thing/list.
+      const hasAgent = await ensureAgentId();
+      if (!hasAgent) {
+        setDevices([]);
+        return;
+      }
+
+      const { data, status } = await listThings();
+      if (status === 200) {
+        const mapped = (data.thingList || []).map((thing) => ({
+          thingUid: thing.thingUID,
+          label: thing.label,
+          room: thing.roomName || "—",
+          status: false,
+          channelId: thing.thingItemsListResponseList?.[0]?.channelId,
+        }));
+        setDevices(mapped);
+      }
+    } catch (err) {
+      setDevices([]);
+      console.error(err.response?.data?.message || "Failed to fetch devices");
+    } finally {
+      setLoadingDevices(false);
+    }
+  }, [navigate]);
+
+  useEffect(() => {
+    fetchDevices();
+  }, [fetchDevices]);
+
+  /* =========================================
+      TOGGLE (POST /thing/items/control)
+  ========================================= */
+  const toggleDevice = async (device) => {
+    if (!device?.thingUid || !device?.channelId) {
+      console.warn("Device control unavailable - missing thingUid/channelId:", device);
+      return;
+    }
+    const newStatus = !device.status;
+
+    // Optimistic update - flip immediately, revert if the request fails.
+    setDevices((prev) =>
+      prev.map((d) => (d.thingUid === device.thingUid ? { ...d, status: newStatus } : d))
+    );
+
+    try {
+      await controlThing(device.thingUid, device.channelId, newStatus ? "ON" : "OFF");
+    } catch (err) {
+      setDevices((prev) =>
+        prev.map((d) => (d.thingUid === device.thingUid ? { ...d, status: !newStatus } : d))
+      );
+      console.error(err.response?.data?.message || "Sending command failed");
+    }
+  };
 
   return(
 
@@ -158,14 +197,7 @@ function AllDevices() {
 
             <button
               className="add-device-btn"
-              onClick={() => {
-
-                setDeviceName("");
-                setRoomName("");
-
-                setShowAdd(true);
-
-              }}
+              onClick={() => navigate("/scan-devices")}
             >
 
               <FaPlus />
@@ -176,6 +208,15 @@ function AllDevices() {
 
           </div>
 
+          {loadingDevices ? (
+            <div style={{ textAlign: "center", padding: "40px", color: "#888" }}>
+              Loading devices...
+            </div>
+          ) : devices.length === 0 ? (
+            <div style={{ textAlign: "center", padding: "40px", color: "#888" }}>
+              No Devices Found
+            </div>
+          ) : (
           <table className="device-table">
 
             <thead>
@@ -197,7 +238,7 @@ function AllDevices() {
             <tbody>
                 {devices.map((device) => (
 
-<tr key={device.id}>
+<tr key={device.thingUid}>
 
     <td className="device-column">
 
@@ -205,13 +246,13 @@ function AllDevices() {
 
             <div className="device-icon">
 
-                {device.icon}
+                <FaTv />
 
             </div>
 
             <span>
 
-                {device.name}
+                {device.label}
 
             </span>
 
@@ -240,29 +281,7 @@ function AllDevices() {
             height={22}
             width={46}
 
-            onChange={() => {
-
-                setDevices(
-
-                    devices.map((d)=>
-
-                        d.id===device.id
-
-                        ?{
-
-                            ...d,
-
-                            status:!d.status
-
-                        }
-
-                        :d
-
-                    )
-
-                );
-
-            }}
+            onChange={() => toggleDevice(device)}
 
         />
 
@@ -280,9 +299,7 @@ function AllDevices() {
 
                     setSelectedDevice(device);
 
-                    setDeviceName(device.name);
-
-                    setRoomName(device.room);
+                    setDeviceName(device.label);
 
                     setShowEdit(true);
 
@@ -322,79 +339,7 @@ function AllDevices() {
 </tbody>
 
 </table>
-      {/* =========================
-              ADD DEVICE POPUP
-      ========================== */}
-
-      {showAdd && (
-
-        <div className="popup-overlay">
-
-          <div className="popup">
-
-            <h2>Add Device</h2>
-
-            <input
-              type="text"
-              placeholder="Device Name"
-              value={deviceName}
-              onChange={(e)=>setDeviceName(e.target.value)}
-            />
-
-            <input
-              type="text"
-              placeholder="Room Name"
-              value={roomName}
-              onChange={(e)=>setRoomName(e.target.value)}
-            />
-
-            <div className="popup-buttons">
-
-              <button
-                className="cancel-btn"
-                onClick={()=>setShowAdd(false)}
-              >
-                Cancel
-              </button>
-
-              <button
-                className="save-btn"
-                onClick={()=>{
-
-                  if(deviceName.trim()==="" || roomName.trim()===""){
-                    alert("Please fill all fields");
-                    return;
-                  }
-
-                  setDevices([
-                    ...devices,
-                    {
-                      id:Date.now(),
-                      icon:<FaTv />,
-                      name:deviceName,
-                      room:roomName,
-                      status:false
-                    }
-                  ]);
-
-                  setShowAdd(false);
-                  setShowSuccess(true);
-
-                  setDeviceName("");
-                  setRoomName("");
-
-                }}
-              >
-                Add Device
-              </button>
-
-            </div>
-
-          </div>
-
-        </div>
-
-      )}
+          )}
       {/* =========================
         EDIT DEVICE
 ========================= */}
@@ -414,13 +359,6 @@ value={deviceName}
 onChange={(e)=>setDeviceName(e.target.value)}
 />
 
-<input
-type="text"
-placeholder="Room Name"
-value={roomName}
-onChange={(e)=>setRoomName(e.target.value)}
-/>
-
 <div className="popup-buttons">
 
 <button
@@ -434,33 +372,31 @@ Cancel
 
 <button
 className="save-btn"
-onClick={()=>{
+onClick={async ()=>{
 
-setDevices(
+  if (deviceName.trim() === "") {
+    alert("Enter Device Name");
+    return;
+  }
 
-devices.map((d)=>
+  const device = selectedDevice;
+  const trimmedName = deviceName.trim();
 
-d.id===selectedDevice.id
-
-?{
-
-...d,
-
-name:deviceName,
-
-room:roomName
-
-}
-
-:d
-
-)
-
-);
-
-setShowEdit(false);
-
-setShowSuccess(true);
+  try {
+    await updateThing(device.thingUid, { label: trimmedName });
+    setDevices(
+      devices.map((d)=>
+        d.thingUid===device.thingUid
+        ? { ...d, label: trimmedName }
+        : d
+      )
+    );
+    setShowEdit(false);
+    setSuccessMessage("Device Updated Successfully");
+    setShowSuccess(true);
+  } catch (err) {
+    alert(err.response?.data?.message || "Failed to update device");
+  }
 
 }}
 >
@@ -493,7 +429,7 @@ Save
 
 Are you sure you want to delete
 
-<b> {selectedDevice?.name}</b> ?
+<b> {selectedDevice?.label}</b> ?
 
 </p>
 
@@ -510,21 +446,24 @@ Cancel
 
 <button
 className="delete-confirm-btn"
-onClick={()=>{
+onClick={async ()=>{
 
-setDevices(
+  const device = selectedDevice;
 
-devices.filter(
-
-(d)=>d.id!==selectedDevice.id
-
-)
-
-);
-
-setShowDelete(false);
-
-setShowSuccess(true);
+  try {
+    await deleteThing(device.thingUid);
+    setDevices(
+      devices.filter(
+        (d)=>d.thingUid!==device.thingUid
+      )
+    );
+    setShowDelete(false);
+    setSuccessMessage("Device Deleted Successfully");
+    setShowSuccess(true);
+  } catch (err) {
+    setShowDelete(false);
+    alert(err.response?.data?.message || "Failed to delete device");
+  }
 
 }}
 >
@@ -565,7 +504,7 @@ Success
 
 <p>
 
-Action Completed Successfully
+{successMessage}
 
 </p>
 

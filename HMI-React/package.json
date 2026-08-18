@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "axios": "^1.19.0",
     "lottie-react": "^2.4.1",
     "react": "^19.2.7",
     "react-clock": "^6.0.0",

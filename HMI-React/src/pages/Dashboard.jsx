@@ -11,7 +11,7 @@ import schedulerIcon from "../assets/Smart.svg";
 import userIcon from "../assets/User.svg";
 
 function Dashboard() {
-  const username = "Jai Guru";
+  const username = localStorage.getItem("name");
   const navigate = useNavigate();
 
   return (

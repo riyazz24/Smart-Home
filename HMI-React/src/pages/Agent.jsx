@@ -1,6 +1,7 @@
 import "./Agent.css";
 
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState, useCallback } from "react";
 
 import triangleDesign from "../assets/triangle design.svg";
 import lightbulb from "../assets/Lightbulb.svg";
@@ -14,13 +15,34 @@ import backIcon from "../assets/back.svg";
 
 import agentOnline from "../assets/AgentOnline.svg";
 import agentOffline from "../assets/AgentOffline.svg";
+import { ensureAgentId } from "../util/AgentApi";
 
 function Agent() {
 
   const navigate = useNavigate();
 
-  // Change this to false to test Offline (const isOnline = agent.status === "online";)
-  const isOnline = false;
+  const [isOnline, setIsOnline] = useState(false);
+  const [checking, setChecking] = useState(true);
+
+  const isLoggedIn = () => !!localStorage.getItem("sessionId");
+
+  const checkAgentStatus = useCallback(async () => {
+    if (!isLoggedIn()) {
+      navigate("/login");
+      return;
+    }
+    setChecking(true);
+    try {
+      const hasAgent = await ensureAgentId();
+      setIsOnline(hasAgent);
+    } finally {
+      setChecking(false);
+    }
+  }, [navigate]);
+
+  useEffect(() => {
+    checkAgentStatus();
+  }, [checkAgentStatus]);
 
   return (
 
@@ -68,11 +90,19 @@ function Agent() {
       </button>
 
       {/* Whole Card SVG */}
-      <img
-        src={isOnline ? agentOnline : agentOffline}
-        className="agent-card"
-        alt="Agent Status"
-      />
+      {checking ? (
+        <div style={{ textAlign: "center", marginTop: "160px", color: "#888" }}>
+          Checking agent status...
+        </div>
+      ) : (
+        <img
+          src={isOnline ? agentOnline : agentOffline}
+          className="agent-card"
+          alt="Agent Status"
+          onClick={() => { if (!isOnline) navigate("/pairing"); }}
+          style={!isOnline ? { cursor: "pointer" } : undefined}
+        />
+      )}
 
       {/* Bottom Decorations */}
       <img

@@ -1,7 +1,7 @@
 import "./ScanDevices.css";
 import BottomNavigation from "../components/BottomNavigation";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import triangleDesign from "../assets/triangle design.svg";
 import {
   FaArrowLeft,
@@ -11,61 +11,140 @@ import {
   FaCheckCircle
 } from "react-icons/fa";
 
-import noDevicesImage from "../assets/no devices.svg";
+import { scanThing, createThing } from "../util/ThingApi";
+import { listRooms } from "../util/RoomApi";
+import { ensureAgentId } from "../util/AgentApi";
+
+// The backend only exposes:
+//   - POST /thing/scan   -> fire-and-forget MQTT trigger, no result comes
+//                            back over HTTP or any topic this app listens on
+//   - POST /thing/create -> creates one specific, known device (only
+//                            thingTypeUid "wiz:color-bulb" is accepted)
+// There's no endpoint that returns "devices found nearby" to pick from, so
+// unlike the original mock, this page can't show a live-discovered list.
+// Instead: trigger the scan (in case the agent-side flow depends on it),
+// then let the user add the WiZ bulb they want by its IP/MAC directly.
+const SUPPORTED_THING_TYPE = "wiz:color-bulb";
 
 function ScanDevices() {
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   /* --------------------------
         STATES
   -------------------------- */
 
   const [loading, setLoading] = useState(true);
+  const [scanError, setScanError] = useState("");
 
-  const [devicesFound, setDevicesFound] = useState(true);
+  const [rooms, setRooms] = useState([]);
+  const [loadingRooms, setLoadingRooms] = useState(true);
 
   const [showAdd, setShowAdd] = useState(false);
-
   const [showSuccess, setShowSuccess] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [formError, setFormError] = useState("");
 
   const [deviceName, setDeviceName] = useState("");
+  const [roomId, setRoomId] = useState(location.state?.roomId || "");
+  const [ipAddress, setIpAddress] = useState("");
+  const [macAddress, setMacAddress] = useState("");
 
-  const [roomName, setRoomName] = useState("");
+  const isLoggedIn = () => !!localStorage.getItem("sessionId");
 
-  const [devices] = useState([
+  /* =========================================
+      TRIGGER SCAN (POST /thing/scan)
+  ========================================= */
+  useEffect(() => {
+    const runScan = async () => {
+      if (!isLoggedIn()) {
+        navigate("/login");
+        return;
+      }
 
-    {
-      id: 1,
-      name: "Android TV",
-      room: "Living Room"
-    },
+      setLoading(true);
+      try {
+        const hasAgent = await ensureAgentId();
+        if (!hasAgent) {
+          setScanError("No paired agent found - pair a device first.");
+          return;
+        }
+        await scanThing(SUPPORTED_THING_TYPE.split(":")[0]);
+      } catch (err) {
+        setScanError(err.response?.data?.message || "Failed to trigger scan");
+      } finally {
+        // The scan trigger is fire-and-forget (no results come back to this
+        // page), so this delay is purely cosmetic - it keeps the existing
+        // "Scanning..." animation for a moment before showing the add-device
+        // form, instead of jarringly skipping straight to it.
+        setTimeout(() => setLoading(false), 1800);
+      }
+    };
+    runScan();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-    {
-      id: 2,
-      name: "LG Smart TV",
-      room: "Bedroom"
-    },
+  /* =========================================
+      FETCH ROOMS (GET /room/list) - needed to
+      pick which room the new device belongs to
+  ========================================= */
+  useEffect(() => {
+    const fetchRooms = async () => {
+      setLoadingRooms(true);
+      try {
+        const { data, status } = await listRooms();
+        if (status === 200) {
+          const roomList = data.roomList || [];
+          setRooms(roomList);
+          if (!roomId && roomList.length > 0) {
+            setRoomId(roomList[0].roomId);
+          }
+        }
+      } catch (err) {
+        setRooms([]);
+        console.error(err.response?.data?.message || "Failed to fetch rooms");
+      } finally {
+        setLoadingRooms(false);
+      }
+    };
+    fetchRooms();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-    {
-      id: 3,
-      name: "Smart Bulb",
-      room: "Dining Room"
+  /* =========================================
+      CREATE DEVICE (POST /thing/create)
+  ========================================= */
+  const addDevice = async () => {
+    if (deviceName.trim() === "" || !roomId || ipAddress.trim() === "" || macAddress.trim() === "") {
+      setFormError("Please fill all fields");
+      return;
     }
 
-  ]);
+    setFormError("");
+    setSaving(true);
 
-  useEffect(() => {
+    try {
+      await createThing({
+        roomId,
+        thingTypeUid: SUPPORTED_THING_TYPE,
+        label: deviceName.trim(),
+        ipAddress: ipAddress.trim(),
+        macAddress: macAddress.trim(),
+      });
 
-    const timer = setTimeout(() => {
+      setShowAdd(false);
+      setShowSuccess(true);
 
-      setLoading(false);
-
-    }, 3500);
-
-    return () => clearTimeout(timer);
-
-  }, []);
+      setDeviceName("");
+      setIpAddress("");
+      setMacAddress("");
+    } catch (err) {
+      setFormError(err.response?.data?.message || err.response?.data?.error || "Failed to add device");
+    } finally {
+      setSaving(false);
+    }
+  };
 
   return (
 
@@ -179,101 +258,63 @@ function ScanDevices() {
 
           ) : (
             <>
-  {devicesFound ? (
+  <div className="device-list">
 
-    <div className="device-list">
+    <div className="device-card">
 
-      {devices.map((device) => (
+      <div className="device-left">
 
-        <div
-          className="device-card"
-          key={device.id}
-        >
+        <div className="device-icon">
 
-          <div className="device-left">
-
-            <div className="device-icon">
-
-              <FaTv />
-
-            </div>
-
-            <div>
-
-              <h3>{device.name}</h3>
-
-              <span>{device.room}</span>
-
-            </div>
-
-          </div>
-
-          <button
-            className="add-btn"
-            onClick={() => {
-
-              setDeviceName(device.name);
-              setRoomName(device.room);
-
-              setShowAdd(true);
-
-            }}
-          >
-
-            <FaPlus />
-
-            Add
-
-          </button>
+          <FaTv />
 
         </div>
 
-      ))}
+        <div>
 
-    </div>
+          <h3>WiZ Full Color Bulb</h3>
 
-  ) : (
+          <span>Enter its IP and MAC address to add it</span>
 
-    <div className="no-device-container">
+        </div>
 
-      <img
-        src={noDevicesImage}
-        alt="No Devices"
-        className="no-device-image"
-      />
-
-      <h2>No Devices Found</h2>
-
-      <p>
-
-        We couldn't find any nearby smart devices.
-
-      </p>
+      </div>
 
       <button
-        className="scan-again-btn"
+        className="add-btn"
+        disabled={loadingRooms || rooms.length === 0}
         onClick={() => {
 
-          setLoading(true);
+          setDeviceName("");
+          setIpAddress("");
+          setMacAddress("");
+          setFormError("");
+          if (!roomId && rooms.length > 0) setRoomId(rooms[0].roomId);
 
-          setTimeout(() => {
-
-            setLoading(false);
-
-            setDevicesFound(true);
-
-          },3000);
+          setShowAdd(true);
 
         }}
       >
 
-        Scan Again
+        <FaPlus />
+
+        Add
 
       </button>
 
     </div>
 
-  )}
+    {scanError && (
+      <p style={{ color: "#d10000", marginTop: "20px" }}>{scanError}</p>
+    )}
+
+    {!loadingRooms && rooms.length === 0 && (
+      <p style={{ color: "#7A7A7A", marginTop: "20px" }}>
+        You don't have any rooms yet - add a room first so a new device has somewhere to go.
+      </p>
+    )}
+
+  </div>
 
   {/* ======================
         ADD POPUP
@@ -294,12 +335,42 @@ function ScanDevices() {
           placeholder="Device Name"
         />
 
+        <select
+          value={roomId}
+          onChange={(e)=>setRoomId(e.target.value)}
+          style={{
+            width: "100%",
+            height: "50px",
+            border: "1px solid #DADADA",
+            borderRadius: "10px",
+            padding: "12px 15px",
+            marginBottom: "18px",
+            fontSize: "16px",
+            outline: "none",
+          }}
+        >
+          {rooms.map((room) => (
+            <option key={room.roomId} value={room.roomId}>{room.roomName}</option>
+          ))}
+        </select>
+
         <input
           type="text"
-          value={roomName}
-          onChange={(e)=>setRoomName(e.target.value)}
-          placeholder="Room Name"
+          value={ipAddress}
+          onChange={(e)=>setIpAddress(e.target.value)}
+          placeholder="IP Address (e.g. 192.168.0.56)"
         />
+
+        <input
+          type="text"
+          value={macAddress}
+          onChange={(e)=>setMacAddress(e.target.value)}
+          placeholder="MAC Address"
+        />
+
+        {formError && (
+          <p style={{ color: "#d10000", marginTop: "-10px", marginBottom: "18px" }}>{formError}</p>
+        )}
 
         <div className="popup-buttons">
 
@@ -314,16 +385,11 @@ function ScanDevices() {
 
           <button
             className="save-btn"
-            onClick={()=>{
-
-              setShowAdd(false);
-
-              setShowSuccess(true);
-
-            }}
+            disabled={saving}
+            onClick={addDevice}
           >
 
-            Add Device
+            {saving ? "Adding..." : "Add Device"}
 
           </button>
 

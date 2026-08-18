@@ -1,279 +1,155 @@
 import "./Profile.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import BottomNavigation from "../components/BottomNavigation";
 import rightRibbon from "../assets/triangle design.svg";
+import axiosInstance from "../util/AxiosInstance";
 
-import {
-  FaArrowLeft,
-  FaUser,
-  FaSignOutAlt,
-  FaEdit,
-  FaHome,
-  FaClock,
-  FaUserCircle
-} from "react-icons/fa";
+import { FaArrowLeft, FaUser, FaSignOutAlt } from "react-icons/fa";
+
 function Profile() {
-
   const navigate = useNavigate();
 
- const [name, setName] = useState("");
-const [phone, setPhone] = useState("");
-const [email, setEmail] = useState("");
-const [error, setError] = useState("");
- 
-const [showPopup, setShowPopup] = useState(false);
-  return (
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
 
-    <div className="profile-page">
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const { data, status } = await axiosInstance.get("/user/profile");
+        if (status === 200) {
+          setName(data.fullName || "");
+          setPhone(data.contactNo || "");
+          setEmail(data.email || "");
+        }
+      } catch (err) {
+        setError(err.response?.data?.message || "Could not load your profile.");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-      {/* LEFT CORNER */}
+    fetchProfile();
+  }, []);
 
-      <svg
-        className="menu-corner-left"
-        xmlns="http://www.w3.org/2000/svg"
-        width="180"
-        height="190"
-        viewBox="0 0 400 190"
-        fill="none"
-      >
-        <path
-          d="M -80 110 A 220 220 0 0 0 190 -80"
-          stroke="#000"
-          strokeWidth="1.2"
-          fill="none"
-          strokeLinecap="round"
-        />
-
-        <path
-          d="M -50 135 A 190 190 0 0 0 215 -50"
-          stroke="#000"
-          strokeWidth="1.2"
-          fill="none"
-          strokeLinecap="round"
-        />
-      </svg>
-
-      {/* RIGHT RIBBON */}
-
-      <img
-        src={rightRibbon}
-        alt="Ribbon"
-        className="corner-right-ribbon"
-      />
-
-      {/* BACK BUTTON */}
-
-      <button
-        className="back-btn"
-        onClick={() => navigate(-1)}
-      >
-        <FaArrowLeft />
-      </button>
-
-      <div className="profile-wrapper">
-              {/* TOP HEADER */}
-
-      <div className="profile-header">
-
-        <span className="breadcrumb">
-
-          Settings
-
-          <span className="arrow"> &gt; </span>
-
-        </span>
-
-        <span className="current-page">
-
-          Profile
-
-        </span>
-
-      </div>
-
-      {/* MAIN CONTENT */}
-
-      <div className="profile-container">
-
-        {/* LEFT MENU */}
-
-        <aside className="profile-sidebar">
-
-          <div className="profile-menu active-menu">
-
-            <FaUser />
-
-            <span>Profile</span>
-
-          </div>
-
-          <div
-            className="profile-menu"
-            onClick={() => navigate("/login")}
-          >
-
-            <FaSignOutAlt />
-
-            <span>Logout</span>
-
-          </div>
-
-        </aside>
-
-        {/* RIGHT FORM */}
-
-        <section className="profile-content">
-
-          <h2>Profile</h2>
-          {/* NAME */}
-
-<div className="input-group">
-
-  <label>Name</label>
-
-  <div className="input-box">
-
-    <input
-      type="text"
-      value={name}
-      disabled={false}
-      onChange={(e) => setName(e.target.value)}
-    />
-
-    
-
-  </div>
-
-</div>
-
-{/* PHONE */}
-
-<div className="input-group">
-
-  <label>Phone Number</label>
-
-  <div className="input-box">
-
-    <input
-      type="text"
-      value={phone}
-      disabled={false}
-      onChange={(e) => setPhone(e.target.value)}
-    />
-
-    
-  </div>
-
-</div>
-
-{/* EMAIL */}
-
-<div className="input-group">
-
-  <label>Email</label>
-
-  <div className="input-box">
-
-    <input
-      type="email"
-      value={email}
-      disabled={false}
-      onChange={(e) => setEmail(e.target.value)}
-    />
-
-    <input
-type="email"
-placeholder="Enter email"
-value={email}
-onChange={(e)=>setEmail(e.target.value)}
-/>
-
-  </div>
-
-</div>
-
-<div
-  className="change-password"
-  onClick={() => navigate("/forgot-password")}
->
-
-  Want to Change Your Password ?
-
-</div>
-{error && (
-  <div className="profile-error">
-    {error}
-  </div>
-)}
-<button
-  className="submit-btn"
-  onClick={() => {
-
+  const handleSubmit = async () => {
     if (name.trim() === "" || phone.trim() === "" || email.trim() === "") {
       setError("Please fill all fields");
       return;
     }
 
     setError("");
-    setShowPopup(true);
+    setSaving(true);
+    try {
+      const { status } = await axiosInstance.patch("/user/profile/update", {
+        email,
+        contactNo: phone,
+      });
 
-  }}
->
-  SUBMIT
-</button>
-{showPopup && (
+      if (status === 200) {
+        setShowPopup(true);
+      }
+    } catch (err) {
+      setError(err.response?.data?.message || "Profile update failed. Please try again.");
+    } finally {
+      setSaving(false);
+    }
+  };
 
-<div className="popup-overlay">
+  return (
+    <div className="profile-page">
+      <svg className="menu-corner-left" xmlns="http://www.w3.org/2000/svg" width="180" height="190" viewBox="0 0 400 190" fill="none">
+        <path d="M -80 110 A 220 220 0 0 0 190 -80" stroke="#000" strokeWidth="1.2" fill="none" strokeLinecap="round" />
+        <path d="M -50 135 A 190 190 0 0 0 215 -50" stroke="#000" strokeWidth="1.2" fill="none" strokeLinecap="round" />
+      </svg>
 
-<div className="popup">
+      <img src={rightRibbon} alt="Ribbon" className="corner-right-ribbon" />
 
-<div className="success-circle">
+      <button className="back-btn" onClick={() => navigate(-1)}>
+        <FaArrowLeft />
+      </button>
 
-✓
+      <div className="profile-wrapper">
+        <div className="profile-header">
+          <span className="breadcrumb">
+            Settings<span className="arrow"> &gt; </span>
+          </span>
+          <span className="current-page">Profile</span>
+        </div>
 
-</div>
+        <div className="profile-container">
+          <aside className="profile-sidebar">
+            <div className="profile-menu active-menu">
+              <FaUser />
+              <span>Profile</span>
+            </div>
+            <div className="profile-menu" onClick={() => navigate("/login")}>
+              <FaSignOutAlt />
+              <span>Logout</span>
+            </div>
+          </aside>
 
-<h2>
+          <section className="profile-content">
+            <h2>Profile</h2>
 
-Profile Updated
+            {loading ? (
+              <p>Loading profile...</p>
+            ) : (
+              <>
+                <div className="input-group">
+                  <label>Name</label>
+                  <div className="input-box">
+                    <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
+                  </div>
+                </div>
+                         
+                <div className="input-group">
+                  <label>Phone Number</label>
+                  <div className="input-box">
+                    <input type="text" value={phone} onChange={(e) => setPhone(e.target.value)} />
+                  </div>
+                </div>
 
-</h2>
+                <div className="input-group">
+                  <label>Email</label>
+                  <div className="input-box">
+                    <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                  </div>
+                </div>
 
-<p>
+                <div className="change-password" onClick={() => navigate("/forgot-password")}>
+                  Want to Change Your Password ?
+                </div>
 
-Your profile has been updated successfully.
+                {error && <div className="profile-error">{error}</div>}
 
-</p>
+                <button className="submit-btn" onClick={handleSubmit} disabled={saving}>
+                  {saving ? "SAVING..." : "SUBMIT"}
+                </button>
+              </>
+            )}
 
-<button
-
-className="save-btn"
-
-onClick={()=>setShowPopup(false)}
-
->
-
-OK
-
-</button>
-
-</div>
-
-</div>
-
-)}
-                </section>
-
+            {showPopup && (
+              <div className="popup-overlay">
+                <div className="popup">
+                  <div className="success-circle">✓</div>
+                  <h2>Profile Updated</h2>
+                  <p>Your profile has been updated successfully.</p>
+                  <button className="save-btn" onClick={() => setShowPopup(false)}>OK</button>
+                </div>
+              </div>
+            )}
+          </section>
+        </div>
       </div>
-
+      <BottomNavigation active="profile" />
     </div>
-<BottomNavigation active="profile" />
-  </div>
-  
-
   );
-
 }
 
 export default Profile;
